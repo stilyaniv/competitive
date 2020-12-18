@@ -14,6 +14,7 @@
 from functools import partial
 import re
 
+INPUT_FILE_PATH = "inputs/day_4_input.txt"
 
 def validate_length(length_str):
     regex = re.compile(r"^(\d{0,1}\d\d)(in|cm)$")
@@ -73,35 +74,36 @@ def get_passport_fields(passport_str):
     return field_values
 
 
-def validate_passport(passport_str):
+def validate_passport(passport_str, check_field_values=False):
     fields = get_passport_fields(passport_str)
 
     if not set(REQUIRED_FIELDS).issubset(fields):
         return False
 
-    for field, value in fields.items():
-        validator = REQUIRED_FIELDS.get(field, lambda s: True)
-        if not validator(value):
-            return False
+    if check_field_values:
+        for field, value in fields.items():
+            validator = REQUIRED_FIELDS.get(field, lambda s: True)
+            if not validator(value):
+                return False
     return True
 
-def count_valid_passports_from_file():
+def count_valid_passports_from_file(input_file_path, check_field_values=False):
     count = 0
-    with open("day_4_input.txt") as file:
+    with open(input_file_path) as file:
         current_passport = ""
         for line in file:
             if len(line.split()) == 0:
-                #TODO add optional flag to perform shallow or deep check
-                count += validate_passport(current_passport)
+                count += validate_passport(current_passport,check_field_values)
                 current_passport = ""
                 continue
             current_passport += line
         #end of file is ignored if there aren't new lines,
         # so last line and passport needs to be validated after EoF
         current_passport += line
-        count += validate_passport(current_passport)
+        count += validate_passport(current_passport, check_field_values)
     return count
 
 
 if __name__ == "__main__":
-    print(count_valid_passports_from_file())
+    print(count_valid_passports_from_file(INPUT_FILE_PATH))
+    print(count_valid_passports_from_file(INPUT_FILE_PATH, check_field_values=True))

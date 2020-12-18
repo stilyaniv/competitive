@@ -202,9 +202,9 @@ CHALLENGE_INPUT = [
     1278,
     1861,
 ]
-        
+
 def test_find_nums_pair_random():
-    assert 514579 == day_1.find_nums_pair(
+    result = day_1.find_nums_pair(
         [
             1010,  # decoy
             1721,  # this
@@ -215,10 +215,11 @@ def test_find_nums_pair_random():
             1456,
         ]
     )
+    assert result == 514579
 
 
 def test_find_nums_pair_random_reversed():
-    assert 514579 == day_1.find_nums_pair(
+    result = day_1.find_nums_pair(
         [
             1456,
             675,
@@ -229,10 +230,11 @@ def test_find_nums_pair_random_reversed():
             1010,  # decoy
         ]
     )
+    assert result == 514579
 
 
 def test_find_nums_pair_sequential():
-    assert 514579 == day_1.find_nums_pair(
+    result = day_1.find_nums_pair(
         [
             1010,  # decoy
             1456,
@@ -243,10 +245,10 @@ def test_find_nums_pair_sequential():
             979,
         ]
     )
-
+    assert result == 514579
 
 def test_find_nums_pair_first_and_last():
-    assert 514579 == day_1.find_nums_pair(
+    result = day_1.find_nums_pair(
         [
             299,  # this
             1456,
@@ -257,14 +259,14 @@ def test_find_nums_pair_first_and_last():
             1721,  # this
         ]
     )
-
+    assert result == 514579
 
 def test_find_nums_pair_challenge():
-    assert 788739 == day_1.find_nums_pair(CHALLENGE_INPUT)
+    assert day_1.find_nums_pair(CHALLENGE_INPUT) == 788739
 
 
 def test_find_nums_triple_first_and_last():
-    assert 241861950 == day_1.find_nums_triple(
+    result = day_1.find_nums_triple(
         [
             299,  # this
             1456,
@@ -275,6 +277,7 @@ def test_find_nums_triple_first_and_last():
             1721,  # this
         ]
     )
+    assert result == 241861950
 
-def test_find_nums_pair_challenge():
-    assert 178724430 == day_1.find_nums_triple(CHALLENGE_INPUT)
+def test_find_nums_triple_challenge():
+    assert day_1.find_nums_triple(CHALLENGE_INPUT) == 178724430

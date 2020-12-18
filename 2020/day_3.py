@@ -1,13 +1,15 @@
-def count_trees(grid, horizontalChange, verticalChange):
-    colCount = len(grid[0])
+INPUT_FILE_PATH = "inputs/day_3_input.txt"
+
+def count_trees(grid, horizontal_change, vertical_change):
+    col_count = len(grid[0])
     count = 0
-    rowIdx = 0
-    colIdx = 0
-    while rowIdx < len(grid):
-        colIdx = colIdx % colCount
-        cell = grid[rowIdx][colIdx]
-        colIdx += horizontalChange
-        rowIdx += verticalChange
+    row_idx = 0
+    col_idx = 0
+    while row_idx < len(grid):
+        col_idx = col_idx % col_count
+        cell = grid[row_idx][col_idx]
+        col_idx += horizontal_change
+        row_idx += vertical_change
         count += cell == "#"
 
     return count
@@ -21,7 +23,7 @@ def count_trees_many_slopes(grid, slopes):
 
 
 if __name__ == "__main__":
-    with open("day_3_input.txt") as file:
+    with open(INPUT_FILE_PATH) as file:
         grid = file.read().split()
     print(count_trees(grid, 3, 1))
     slopes = (

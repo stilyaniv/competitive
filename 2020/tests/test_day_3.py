@@ -20,12 +20,13 @@ def test_count_trees_example():
 
 
 def test_count_trees_challenge():
-    with open("day_3_input.txt") as file:
+    with open(day_3.INPUT_FILE_PATH) as file:
         grid = file.read().split()
     assert 198 == day_3.count_trees(grid, 3, 1)
 
+
 def test_count_trees_many_slopes():
-    with open("day_3_input.txt") as file:
+    with open(day_3.INPUT_FILE_PATH) as file:
         grid = file.read().split()
     slopes = (
         (1, 1),
