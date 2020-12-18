@@ -60,7 +60,11 @@ confidence=
 # --enable=similarities". If you want to run only the classes checker, but have
 # no Warning level messages displayed, use "--disable=all --enable=classes
 # --disable=W".
-disable=#print-statement,
+disable=redefined-outer-name,
+        missing-module-docstring,
+        undefined-loop-variable,
+        missing-function-docstring,
+        #print-statement,
         #parameter-unpacking,
         #unpacking-in-except,
         #old-raise-syntax,
@@ -139,15 +143,12 @@ disable=#print-statement,
         #deprecated-sys-function,
         #exception-escape,
         #comprehension-escape,
-        missing-module-docstring,
-        undefined-loop-variable,
-        missing-function-docstring
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
 # multiple time (only on the command line, not in the configuration file where
 # it should appear only once). See also the "--disable" option for examples.
-enable=c-extension-no-member
+# enable=c-extension-no-member
 
 
 [REPORTS]
