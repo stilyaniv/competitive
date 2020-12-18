@@ -2,3 +2,7 @@
 .pytest_cache
 *.pyc
 */.vscode/
+env/
+2020/*.pdf
+*.gv
+2020/.pytest.ini
