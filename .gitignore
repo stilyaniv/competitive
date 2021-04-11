@@ -1,10 +1,10 @@
 .pytest_cache/
 .vscode/
 env/
+*.egg-info/
 
 *.ini
 *.exe
 *.pyc
 *.gv
 *.pdf
-
