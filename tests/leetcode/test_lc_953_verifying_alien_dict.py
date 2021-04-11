@@ -1,4 +1,4 @@
-from lc_953_verifying_alien_dict import Solution
+from src.leetcode.lc_953_verifying_alien_dict import Solution
 
 
 def test_identical():

@@ -1,4 +1,4 @@
-import day_2
+from src.aoc_2020 import day_2
 
 def test_is_valid_pass_in_range_min():
     assert day_2.is_valid_pass_in_range("1-3 a: abcde")

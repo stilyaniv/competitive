@@ -1,4 +1,4 @@
-INPUT_FILE_PATH = "inputs/day_3_input.txt"
+INPUT_FILE_PATH = "src/aoc_2020/inputs/day_3_input.txt"
 
 def count_trees(grid, horizontal_change, vertical_change):
     col_count = len(grid[0])

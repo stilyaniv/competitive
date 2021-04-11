@@ -1,6 +1,6 @@
 import pytest
 
-import day_6
+from src.aoc_2020 import day_6
 
 EXAMPLE_INPUT = """\
 abc

@@ -1,4 +1,4 @@
-INPUT_FILE_PATH = "inputs/day_6_input.txt"
+INPUT_FILE_PATH = "src/aoc_2020/inputs/day_6_input.txt"
 
 def get_sum_of_any_yes_from_file(input_file_path):
     count = 0

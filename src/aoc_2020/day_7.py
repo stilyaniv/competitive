@@ -4,7 +4,7 @@ from queue import SimpleQueue
 import regex
 from graphviz import Digraph
 
-INPUT_FILE_PATH = "inputs/day_7_input.txt"
+INPUT_FILE_PATH = "src/aoc_2020/inputs/day_7_input.txt"
 
 
 def parse_rule(rule_description, include_weights=False):

@@ -1,7 +1,5 @@
 from typing import List
 
-CHALLENGE_INPUT_FILE_PATH = "inputs/day_1_input.txt"
-
 def find_nums_pair_brute(nums: List[int]) -> int:
     for i in nums:
         for j in nums:
@@ -27,6 +25,6 @@ def find_nums_triple(nums: List[int]) -> int:
 
 
 if __name__ == '__main__':
-    nums = [int(line.strip()) for line in open()]
+    nums = [int(line.strip()) for line in open("day_1_input.txt")]
     print(nums)
     print(find_nums_pair(nums))

@@ -1,4 +1,4 @@
-import day_3
+from src.aoc_2020 import day_3
 
 INPUT_GRID = """
 ..##.......

@@ -1,4 +1,4 @@
-from lc_1704_string_halves_alike import Solution
+from src.leetcode.lc_1704_string_halves_alike import Solution
 
 def test_false():
     s = Solution()

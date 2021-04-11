@@ -1,5 +1,5 @@
 import pytest
-import day_7
+from src.aoc_2020 import day_7
 
 DESCRIPTION = "light red bags contain 1 bright white bag, 2 muted yellow bags."
 DESCRIPTION_NO_CONTENTS = "faded blue bags contain no other bags."

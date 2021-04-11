@@ -1,5 +1,5 @@
 import pytest
-import day_8
+from src.aoc_2020 import day_8
 
 EXAMPLE_INPUT = """\
 nop +0

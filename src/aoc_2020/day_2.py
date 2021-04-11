@@ -1,4 +1,4 @@
-INPUT_FILE_PATH = "inputs/day_2_input.txt"
+INPUT_FILE_PATH = "src/aoc_2020/inputs/day_2_input.txt"
 
 def split_range(line):
     rule_range, rule_char, pwd = line.split()

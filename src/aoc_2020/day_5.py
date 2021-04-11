@@ -1,4 +1,4 @@
-INPUT_FILE_PATH = "inputs/day_5_input.txt"
+INPUT_FILE_PATH = "src/aoc_2020/inputs/day_5_input.txt"
 
 def get_row_id(string):
     return int(string.replace("F", "0").replace("B", "1"), 2)

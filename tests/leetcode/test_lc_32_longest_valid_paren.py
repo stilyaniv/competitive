@@ -1,4 +1,5 @@
-from lc_32_longest_valid_paren import Solution
+from src.leetcode.lc_32_longest_valid_paren import Solution
+
 
 def test_empty():
     s = Solution()

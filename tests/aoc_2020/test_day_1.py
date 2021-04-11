@@ -1,4 +1,4 @@
-import day_1
+from src.aoc_2020 import day_1
 
 CHALLENGE_INPUT = [
     1652,

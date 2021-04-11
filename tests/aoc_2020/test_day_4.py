@@ -1,5 +1,5 @@
 import pytest
-import day_4
+from src.aoc_2020 import day_4
 
 INVALID_PASSPORT_1 = """
     eyr:1972 cid:100
