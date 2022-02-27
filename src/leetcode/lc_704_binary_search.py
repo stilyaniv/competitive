@@ -6,7 +6,7 @@ class Solution:
         start = 0
         end = len(nums) - 1
         while start <= end:
-            mid_idx = (end + start) // 2
+            mid_idx = start + (end - start) // 2
             mid_item = nums[mid_idx]
             if target == mid_item:
                 return mid_idx
