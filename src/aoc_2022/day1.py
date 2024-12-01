@@ -1,4 +1,4 @@
-def sum_top_n_stacks(n=1):
+def top_n_stacks(num_needed=1):
     top_stacks = []
     current_stack = 0
     for line in open(r"./src/aoc_2022/day1.txt"):
@@ -20,16 +20,16 @@ def sum_top_n_stacks(n=1):
             current_stack = 0
         else:
             current_stack += int(line)
-    print(top_stacks)
-    return sum(top_stacks[:n])
+
+    return top_stacks[:num_needed]
 
 
 def part_1():
-    return sum_top_n_stacks(n=1)
+    return sum(top_n_stacks(1))
 
 
 def part_2():
-    return sum_top_n_stacks(n=3)
+    return sum(top_n_stacks(3))
 
 
 if __name__ == "__main__":
