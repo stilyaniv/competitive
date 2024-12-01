@@ -3,7 +3,6 @@ https://adventofcode.com/2024/day/1
 """
 import io
 
-
 EXAMPLE = """\
 3   4
 4   3
@@ -12,6 +11,8 @@ EXAMPLE = """\
 3   9
 3   3
 """
+
+INPUT_FILE_PATH = r"src/aoc_2024/day_01.txt"
 
 
 def part_1(file):
@@ -48,8 +49,8 @@ if __name__ == "__main__":
     with io.StringIO(EXAMPLE) as f:
         print(part_2(f))  # 31
 
-    with open(r"src/aoc_2024/day_01.txt") as f:
+    with open(INPUT_FILE_PATH) as f:
         print(part_1(f))  # 2086478
 
-    with open(r"src/aoc_2024/day_01.txt") as f:
+    with open(INPUT_FILE_PATH) as f:
         print(part_2(f))  # 24941624
