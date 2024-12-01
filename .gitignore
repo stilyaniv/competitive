@@ -9,3 +9,5 @@ env/
 *.pyc
 *.gv
 *.pdf
+
+.env
