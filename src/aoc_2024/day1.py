@@ -1,5 +1,3 @@
-from typing import List
-
 EXAMPLE = """\
 3   4
 4   3
