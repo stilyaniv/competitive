@@ -1,3 +1,9 @@
+"""
+https://adventofcode.com/2024/day/1
+"""
+import io
+
+
 EXAMPLE = """\
 3   4
 4   3
@@ -8,10 +14,9 @@ EXAMPLE = """\
 """
 
 
-def part_1():
+def part_1(file):
     col1, col2 = [], []
-    # for row in EXAMPLE.splitlines():
-    for row in open(r"src/aoc_2024/day_01.txt"):
+    for row in file:
         left, right = row.split()
         col1.append(int(left))
         col2.append(int(right))
@@ -19,11 +24,10 @@ def part_1():
     return total
 
 
-def part_2():
+def part_2(file):
     total = 0
     col1, col2 = [], []
-    # for row in EXAMPLE.splitlines():
-    for row in open(r"src/aoc_2024/day_01.txt"):
+    for row in file:
         left, right = row.split()
         col1.append(int(left))
         col2.append(int(right))
@@ -38,4 +42,14 @@ def part_2():
 
 
 if __name__ == "__main__":
-    print(part_2())
+    with io.StringIO(EXAMPLE) as f:
+        print(part_1(f))  # 11
+
+    with io.StringIO(EXAMPLE) as f:
+        print(part_2(f))  # 31
+
+    with open(r"src/aoc_2024/day_01.txt") as f:
+        print(part_1(f))  # 2086478
+
+    with open(r"src/aoc_2024/day_01.txt") as f:
+        print(part_2(f))  # 24941624
