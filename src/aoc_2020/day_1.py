@@ -28,6 +28,6 @@ def find_nums_triple(nums: List[int]) -> int:
 
 
 if __name__ == "__main__":
-    nums = [int(line.strip()) for line in open("day_1_input.txt")]
+    nums = [int(line.strip()) for line in open("src/aoc_2020/inputs/day_1_input.txt")]
     print(nums)
     print(find_nums_pair(nums))
