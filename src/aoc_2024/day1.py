@@ -10,14 +10,6 @@ EXAMPLE = """\
 """
 
 
-def find_nums_pair_brute(nums: List[int]) -> int:
-    for i in nums:
-        for j in nums:
-            if i != j and i + j == 2020:
-                return i * j
-    return 0
-
-
 def part_1():
     col1, col2 = [], []
     # for row in EXAMPLE.splitlines():
