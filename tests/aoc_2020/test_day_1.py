@@ -203,6 +203,7 @@ CHALLENGE_INPUT = [
     1861,
 ]
 
+
 def test_find_nums_pair_random():
     result = day_1.find_nums_pair(
         [
@@ -247,6 +248,7 @@ def test_find_nums_pair_sequential():
     )
     assert result == 514579
 
+
 def test_find_nums_pair_first_and_last():
     result = day_1.find_nums_pair(
         [
@@ -260,6 +262,7 @@ def test_find_nums_pair_first_and_last():
         ]
     )
     assert result == 514579
+
 
 def test_find_nums_pair_challenge():
     assert day_1.find_nums_pair(CHALLENGE_INPUT) == 788739
@@ -278,6 +281,7 @@ def test_find_nums_triple_first_and_last():
         ]
     )
     assert result == 241861950
+
 
 def test_find_nums_triple_challenge():
     assert day_1.find_nums_triple(CHALLENGE_INPUT) == 178724430
