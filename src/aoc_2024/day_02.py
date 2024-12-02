@@ -2,7 +2,6 @@
 https://adventofcode.com/2024/day/2
 """
 import timeit
-import logging
 import io
 
 EXAMPLE = """\
@@ -71,7 +70,7 @@ def part_1(file):
     return len(safe_reports)
 
 
-def part_2(file):
+def part_2(file, print_reports=False):
     safe_reports = []
     unsafe_reports = []
     for line in file:
@@ -89,8 +88,9 @@ def part_2(file):
                     break
             if not fixed:
                 unsafe_reports.append(line)
-    # print(safe_reports)
-    # print(unsafe_reports)
+    if print_reports:
+        print(safe_reports)
+        print(unsafe_reports)
     return len(safe_reports)
 
 
