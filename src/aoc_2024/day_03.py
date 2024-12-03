@@ -1,6 +1,7 @@
 """
 https://adventofcode.com/2024/day/3
 """
+from pathlib import Path
 import io
 import re
 
@@ -12,7 +13,7 @@ EXAMPLE_2 = """\
 xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))
 """
 
-INPUT_FILE_PATH = r"src/aoc_2024/day_03.txt"
+INPUT_FILE_PATH = f"{Path(__file__).parent / Path(__file__).stem}.txt"
 
 PATTERN_MUL = r"mul\((\d*,\d*)\)"
 PATTERN_DO = r"(do\(\))"
