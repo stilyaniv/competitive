@@ -127,7 +127,7 @@ M · M
 )
 
 
-def part_2(file, visualise=True):
+def part_2(file, visualise=False):
     grid = [[char for char in line.strip()] for line in file]
     total_count = 0
     for r in range(1, len(grid) - 1):
@@ -151,19 +151,14 @@ def part_2(file, visualise=True):
 
 
 if __name__ == "__main__":
-    # with io.StringIO(EXAMPLE) as f:
-    #     print(part_1(f))
+    with io.StringIO(EXAMPLE) as f:
+        print(part_1(f))
 
-    # with open(INPUT_FILE_PATH) as f:
-    #     print(part_1(f))
+    with open(INPUT_FILE_PATH) as f:
+        print(part_1(f))
 
-    # 2520 too low
-    # 2575 correct
-
-    # with io.StringIO(EXAMPLE) as f:
-    #     print(part_2(f))
+    with io.StringIO(EXAMPLE) as f:
+        print(part_2(f, visualise=True))
 
     with open(INPUT_FILE_PATH) as f:
         print(part_2(f))
-
-    # 2041 correct
