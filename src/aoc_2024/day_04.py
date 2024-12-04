@@ -1,6 +1,7 @@
 """
 https://adventofcode.com/2024/day/4
 """
+import time
 import pprint
 import io
 from pathlib import Path
@@ -99,7 +100,6 @@ def part_1(file):
             if "".join(next_4) == "XMAS" or "".join(next_4) == "SAMX":
                 # print('yes')
                 total_count += 1
-    print(total_count)
     return total_count
 
 
@@ -127,29 +127,26 @@ M · M
 )
 
 
-def part_2(file):
-    lines = [[char for char in line.strip()] for line in file]
+def part_2(file, visualise=True):
+    grid = [[char for char in line.strip()] for line in file]
     total_count = 0
-    for r in range(1, len(lines) - 1):
-        for c in range(1, len(lines) - 1):
-            try:
-                box = [(["·" for c in range(len(lines))]) for r in range(len(lines))]
-                box[r][c] = md = lines[r][c]
-                box[r - 1][c - 1] = tl = lines[r - 1][c - 1]
-                box[r + 1][c - 1] = bl = lines[r + 1][c - 1]
-                box[r - 1][c + 1] = tr = lines[r - 1][c + 1]
-                box[r + 1][c + 1] = br = lines[r + 1][c + 1]
-                target_box = f"{tl} · {tr}\n" f"· {md   } ·\n" f"{bl} · {br}\n"
-                # box = "\n".join([" ".join(c for c in line) for line in box])
-                # print(target_box)
-                # print(box)
-                # print()
-            except IndexError:
-                continue
+    for r in range(1, len(grid) - 1):
+        for c in range(1, len(grid) - 1):
+            ti = r - 1
+            bi = r + 1
+            li = c - 1
+            ri = c + 1
+            tl = grid[ti][li]
+            bl = grid[bi][li]
+            tr = grid[ti][ri]
+            br = grid[bi][ri]
+            md = grid[r][c]
+            found = f"{tl} · {tr}\n" f"· {md   } ·\n" f"{bl} · {br}\n"
+            if visualise:
+                print(found)
 
-            if target_box in PART_2_CHOICES:
+            if found in PART_2_CHOICES:
                 total_count += 1
-    print(total_count)
     return total_count
 
 
