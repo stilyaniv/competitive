@@ -18,19 +18,7 @@ MAMMMXMMMM
 MXMXAXMASX
 """
 
-# 0 0
-# 1 0
-# 2 0
-# 3 0
-
-# 1 0
-# 2 0
-# 3 0
-# 4 0
-
 INPUT_FILE_PATH = f"{Path(__file__).parent / Path(__file__).stem}.txt"
-
-# ['X', 'M', 'A']
 
 
 def part_1(file):

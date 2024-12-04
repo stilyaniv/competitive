@@ -21,6 +21,18 @@ M X M X A X M A S X
 8 · · M · M · M · M M
 9 · X · X · X M A S X
 
+# part 1, row left to right
+iterating left to right, top to bottom
+
+0 0
+1 0
+2 0
+3 0
+1 0
+2 0
+3 0
+4 0
+
 # part 1, diagonal going from top left to bottom right
 iterating left to right, top to bottom
 0 0
