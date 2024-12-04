@@ -22,6 +22,7 @@ MXMXAXMASX
 INPUT_FILE_PATH = f"{Path(__file__).parent / Path(__file__).stem}.txt"
 
 
+# TODO combine into iterating once over the whole grid
 def part_1(file):
     lines = [[char for char in line.strip()] for line in file]
     # print(lines)
