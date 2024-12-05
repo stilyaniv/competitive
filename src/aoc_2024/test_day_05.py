@@ -13,10 +13,6 @@ invalid_lines = [
 ]
 
 
-def test_bigger_than():
-    pass
-
-
 def test_part_1_example():
     with io.StringIO(EXAMPLE) as f:
         assert part_1(f) == 143

@@ -1,6 +1,7 @@
 """
 https://adventofcode.com/2024/day/5
 """
+from functools import cmp_to_key
 from pprint import pprint
 import io
 from pathlib import Path
@@ -161,17 +162,7 @@ def part_2(file):
 
     corrected_lines = []
     for line in invalid_lines:
-        for i in range(len(line)):
-            max = line[i]
-            max_idx = i
-            for y in range(i, len(line)):
-                print(f"{line[y]} > {max}")
-                if bigger_than(line[y], max):
-                    max = line[y]
-                    max_idx = y
-            line[i], line[max_idx] = line[max_idx], line[i]
-            print(line)
-        corrected_lines.append(line)
+        corrected_lines.append(sorted(line, key=cmp_to_key(bigger_than)))
 
     mid_total = 0
     for line in corrected_lines:
