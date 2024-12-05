@@ -1,7 +1,6 @@
 """
 https://adventofcode.com/2024/day/5
 """
-from functools import cmp_to_key
 from pprint import pprint
 import io
 from pathlib import Path
@@ -40,28 +39,7 @@ INPUT_FILE_PATH = f"{Path(__file__).parent / Path(__file__).stem}.txt"
 
 
 def part_1(file):
-    lines = []
-    children = {}
-    parents = {}
-    for line in file:
-        line = line.strip()
-        if line == "\n":
-            continue
-        elif "|" in line:
-            parent, child = line.strip().split("|")
-            if parent in children:
-                children[parent].append(child)
-            else:
-                children[parent] = [child.strip()]
-            if child in parents:
-                parents[child].append(parent)
-            else:
-                parents[child] = [parent.strip()]
-        elif "," in line:
-            lines.append(line.split(","))
-    pprint(children)
-    pprint(parents)
-    print(lines)
+    lines, children, parents = read_input(file)
 
     valid_lines = []
     invalid_lines = []
@@ -91,39 +69,8 @@ def part_1(file):
     return mid_total
 
 
-def bigger_than(x, y, children):
-    if x not in children:
-        return False
-    elif y not in children:
-        return True
-
-    if x in children[y]:
-        return False
-
-    return True
-
-
 def part_2(file):
-    # initialize item hierarchy and inputs to check
-    lines = []
-    children = {}
-    parents = {}
-    for line in file:
-        line = line.strip()
-        if line == "\n":
-            continue
-        elif "|" in line:
-            parent, child = line.strip().split("|")
-            if parent in children:
-                children[parent].append(child)
-            else:
-                children[parent] = [child.strip()]
-            if child in parents:
-                parents[child].append(parent)
-            else:
-                parents[child] = [parent.strip()]
-        elif "," in line:
-            lines.append(line.split(","))
+    lines, children, parents = read_input(file)
 
     # find invalid lines
     valid_lines = []
@@ -162,7 +109,17 @@ def part_2(file):
 
     corrected_lines = []
     for line in invalid_lines:
-        corrected_lines.append(sorted(line, key=cmp_to_key(bigger_than)))
+        for i in range(len(line)):
+            max = line[i]
+            max_idx = i
+            for y in range(i, len(line)):
+                print(f"{line[y]} > {max}")
+                if bigger_than(line[y], max):
+                    max = line[y]
+                    max_idx = y
+            line[i], line[max_idx] = line[max_idx], line[i]
+            print(line)
+        corrected_lines.append(line)
 
     mid_total = 0
     for line in corrected_lines:
@@ -170,6 +127,29 @@ def part_2(file):
         mid_total += int(line[len(line) // 2])
 
     return mid_total
+
+
+def read_input(file):
+    lines = []
+    children = {}
+    parents = {}
+    for line in file:
+        line = line.strip()
+        if line == "\n":
+            continue
+        elif "|" in line:
+            parent, child = line.strip().split("|")
+            if parent in children:
+                children[parent].append(child)
+            else:
+                children[parent] = [child.strip()]
+            if child in parents:
+                parents[child].append(parent)
+            else:
+                parents[child] = [parent.strip()]
+        elif "," in line:
+            lines.append(line.split(","))
+    return lines, children, parents
 
 
 if __name__ == "__main__":
