@@ -55,11 +55,7 @@ if __name__ == "__main__":
     df["stars"] = df["stars"].astype(int)
 
     df = df.sort_values(["local_score"], ascending=False)
-    # df = df[["name", "local_score", 'stars']].reset_index(drop=True)
 
-    # expand days into column
-    # df = pd.concat([df.drop(['completion_day_level'], axis=1), df['completion_day_level'].apply(pd.Series)], axis=1)
-    # df = pd.concat([df, df['completion_day_level'].apply(pd.Series)], axis=1)
     df = pd.concat(
         [df.reset_index(drop=True), pd.json_normalize(df["completion_day_level"])],
         axis=1,
@@ -67,11 +63,6 @@ if __name__ == "__main__":
 
     df = df.loc[:, ~df.columns.str.endswith("star_index")]
 
-    # TODO clean up - any nulls should default to no score i.e. latest possible TS for the day
-    # df = df.loc[~df['5.1.get_star_ts'].isnull(), :]
-    # df = df.loc[~df['5.2.get_star_ts'].isnull(), :]
-
-    # TODO iterate over all days
     rank_column_names = []
     for col in df.columns:
         if col.endswith("get_star_ts"):
