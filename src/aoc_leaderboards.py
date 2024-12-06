@@ -1,0 +1,117 @@
+import plotly.express as px
+import pandas as pd
+from pprint import pprint
+from pathlib import Path
+import requests
+import json
+import datetime
+import os
+
+AOC_COOKIE = os.getenv("AOC_COOKIE")
+
+AOC_MEMBER_ID = os.getenv("AOC_MEMBER_ID")
+
+AOC_URL_LEADERBOARD = os.getenv("AOC_URL_LEADERBOARD")
+
+
+def download_latest():
+    response = requests.get(AOC_URL_LEADERBOARD, cookies={"session": AOC_COOKIE})
+
+    ts_now = datetime.datetime.now().isoformat()
+    result_json = response.json()
+    aoc_year = result_json["event"]
+    owner_id = result_json["owner_id"]
+    with open(
+        f"./resources/aoc_{aoc_year}/private_leadboard_{owner_id}_{ts_now}.json", "w"
+    ) as f:
+        json.dump(result_json, f)
+
+
+def get_latest_status():
+    snapshots = sorted(Path("./resources/aoc_2024/").iterdir())
+    latest = snapshots[-1]
+    with open(latest) as f:
+        latest_json = json.load(f)
+    return latest_json
+
+
+if __name__ == "__main__":
+    """
+    https://stackoverflow.com/questions/38231591/split-explode-a-column-of-dictionaries-into-separate-columns-with-pandas
+
+    """
+    # download_latest()
+    latest = get_latest_status()
+    user = latest["members"][AOC_MEMBER_ID]
+    pprint(user, indent=2)
+
+    day1_ts = latest["day1_ts"]
+
+    print(datetime.datetime.fromtimestamp(day1_ts))
+    print(datetime.datetime.fromtimestamp(user["last_star_ts"]))
+
+    df = pd.DataFrame.from_dict(latest["members"]).T
+    df["local_score"] = df["local_score"].astype(int)
+    df["stars"] = df["stars"].astype(int)
+
+    df = df.sort_values(["local_score"], ascending=False)
+    # df = df[["name", "local_score", 'stars']].reset_index(drop=True)
+
+    # expand days into column
+    # df = pd.concat([df.drop(['completion_day_level'], axis=1), df['completion_day_level'].apply(pd.Series)], axis=1)
+    # df = pd.concat([df, df['completion_day_level'].apply(pd.Series)], axis=1)
+    df = pd.concat(
+        [df.reset_index(drop=True), pd.json_normalize(df["completion_day_level"])],
+        axis=1,
+    )
+
+    df = df.loc[:, ~df.columns.str.endswith("star_index")]
+
+    # TODO clean up - any nulls should default to no score i.e. latest possible TS for the day
+    # df = df.loc[~df['5.1.get_star_ts'].isnull(), :]
+    # df = df.loc[~df['5.2.get_star_ts'].isnull(), :]
+
+    # TODO iterate over all days
+    rank_column_names = []
+    for col in df.columns:
+        if col.endswith("get_star_ts"):
+            rank_name = col.replace("get_star_ts", "rank")
+            df[rank_name] = df[col].rank(ascending=False)
+            rank_column_names.append(rank_name)
+    # pd.to_datetime(df['1.1.get_star_ts'], unit='s')
+    # df["1.1"] = df['1.1.get_star_ts'].apply(lambda row: (datetime.datetime.fromtimestamp(day1_ts) + datetime.timedelta(days=1) -
+    #                                                      datetime.datetime.fromtimestamp(row)).seconds)
+    # df["5.1"] = df['5.1.get_star_ts'].apply(lambda row: (datetime.datetime.fromtimestamp(day1_ts) + datetime.timedelta(days=5) -
+    #                                                      datetime.datetime.fromtimestamp(row)).seconds)
+    # df["5.2"] = df['5.2.get_star_ts'].apply(lambda row: (datetime.datetime.fromtimestamp(day1_ts) + datetime.timedelta(days=5) -
+    #                                                      datetime.datetime.fromtimestamp(row)).seconds)
+
+    df = df.drop(["completion_day_level"], axis=1)
+
+    # TODO iterate over all days
+    # fig = px.bar(df, x="name", y=["1.1", "5.1", "5.2"])
+    df = df.sort_values(["local_score"], ascending=False)
+    fig = px.bar(df, x="name", y=sorted(rank_column_names))
+    fig.show()
+
+    # TODO create bump chart with parallel_coordinates
+    # Load the iris dataset provided by the library
+    # df = px.data.iris()
+
+    # Create the chart:
+    # fig = px.parallel_coordinates(
+    #     df,
+    #     color="local_score",
+    #     # labels={"last_star_ts": "last_star_ts", "stars": "stars", "local_score": "local_score"},
+    #     dimensions=['last_star_ts', 'stars'],
+    #     # labels={"species_id": "Species", "sepal_width": "Sepal Width", "sepal_length": "Sepal Length",
+    #     #         "petal_width": "Petal Width", "petal_length": "Petal Length", },
+    #     color_continuous_scale=px.colors.diverging.Tealrose,
+    #     color_continuous_midpoint=2
+    # )
+
+    # # Hide the color scale that is useless in this case
+    # fig.update_layout(coloraxis_showscale=False)
+
+    # # Show the plot
+    # fig.show()
