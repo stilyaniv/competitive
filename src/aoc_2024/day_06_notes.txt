@@ -1,0 +1,120 @@
+        (0, -1)
+(-1, 0)         (1, 0)
+        (0, 1)
+
+
+        
+                        x
+     0    1    2    3    4    5    6    7    8    9        
+0 [['.', '.', '.', '.', '#', '.', '.', '.', '.', '.'],
+1  ['.', '.', '.', '.', '.', '.', '.', '.', '.', '#'],
+2  ['.', '.', '.', '.', '.', '.', '.', '.', '.', '.'],
+3  ['.', '.', '#', '.', '.', '.', '.', '.', '.', '.'],
+4  ['.', '.', '.', '.', '.', '.', '.', '#', '.', '.'],
+5  ['.', '.', '.', '.', '.', '.', '.', '.', '.', '.'],
+6  ['.', '#', '.', '.', '^', '.', '.', '.', '.', '.'],
+7  ['.', '.', '.', '.', '.', '.', '.', '.', '#', '.'],
+8  ['#', '.', '.', '.', '.', '.', '.', '.', '.', '.'],
+9  ['.', '.', '.', '.', '.', '.', '#', '.', '.', '.']]
+
+
+              x
+    0 1 2 3 4 5 6 7 8 9
+  0 . . . . # . . . . .
+  1 . . . . . . . . . #
+  2 . . . . . . . . . .
+  3 . . # . . . . . . .
+  4 . . . . . . . # . .
+y 5 . . . . . . . . . .
+  6 . # . . ^ . . . . .
+  7 . . . . . . . . # .
+  8 # . . . . . . . . .
+  9 . . . . . . # . . .
+
+              x
+    0 1 2 3 4 5 6 7 8 9
+  0 . . . . # . . . . .
+  1 . . . . . . . . . #
+  2 . . . . . . . . . .
+  3 . . # . . . . . . .
+  4 . . . . . . . # . .
+y 5 . . . . . . . . . .
+  6 . # . O ^ . . . . .
+  7 . . . . . . O O # .
+  8 # O . O . . . . . .
+  9 . . . . . . # O . .
+
+(7, 7),
+(6, 7),
+(3, 6), 
+(1, 8),
+(3, 8),
+(7, 9),
+
+# attempt doesn't work as visiting agian is not guaranteed for loop
+(5, 4),
+        elif next_box == 'O':
+            if (x, y) in visited[:-1]:
+
+        # if (x, y) in visited[:-1] and right_turns == 3:
+        #     options.append(next_i)
+        #     right_turns = 0
+        elif next_i not in options_tested:
+            dir_idx += 1
+            base = (x, y)
+            while 0 < y < height-1 and 0 < x < width-1:
+
+            x, y = base
+
+
+          # if (x, y) in visited[:-1] and right_turns == 3:
+        #     options.append(next_i)
+        #     if trial:
+        #         return [], options
+        #     right_turns = 0
+        if next_box == '#':
+            if trial and (x, y) in visited[-1]:
+                return visited, options, (x, y)
+            dir_idx += 1
+            right_turns = right_turns + 1
+            continue
+        elif not trial and next_i not in options_tested:
+            original = (x, y)
+            original_dir_idx = dir_idx
+            options_tested.append(next_i)
+            grid[next_i[1]][next_i[0]] = "#"
+            a, b, last_idx = traverse(grid, y, x, height, width, dir_idx, (x, y), options_tested, True)
+            if last_idx == start_pos:
+                options.append(next_i)
+            grid[next_i[1]][next_i[0]] = "."
+            x, y = original
+            dir_idx = original_dir_idx
+
+# stuck at 
+20 9
+21 9
+22 9
+
+        elif next_box == 'O':
+            if not loop:
+                loop = True
+            else:
+                # if (x, y) in visited[:-1]:
+                return visited, options, True
+            dir_idx += 1
+            continue
+
+# only visited, but still stuck at 
+56 28
+
+if next_box == '#':
+    dir_idx += 1
+    continue
+elif next_box == 'O':
+    if (x, y, dir_idx) in visited[:-1]:
+        return visited, options, True
+    dir_idx += 1
+    continue
+
+visited instead of visited[:-1]
+104 74

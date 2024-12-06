@@ -69,72 +69,85 @@ def part_2(file):
 
     height = len(grid)
     width = len(grid[0])
-    pprint(grid)
 
     x, y = start_pos
-    visited, options, last_idx = traverse(
-        grid, y, x, height, width, 0, start_pos, [], False
-    )
 
+    # x1, y1 = (56, 28)
+    # grid[y1][x1] = "O"
+    # pprint(grid, width=400)
+    # visited, _, is_loop = traverse(grid, y, x, height, width, 0, start_pos, [], False)
+
+    # TODO extremely slow
+    options = []
+    for y1 in range(height):
+        for x1 in range(width):
+            # for x1, y1, _ in visited:
+            # x1, y1 = (5, 4)  # TODO remove
+            print(x1, y1)
+            is_loop = False
+            if grid[y1][x1] == "#":
+                continue
+            grid[y1][x1] = "O"
+            # pprint(grid)
+            visited, _, is_loop = traverse(
+                grid, y, x, height, width, 0, start_pos, [], False
+            )
+            if is_loop:
+                options.append((x1, y1))
+            grid[y1][x1] = "."
+
+    print()
+    # # print(last_idx)
     print(visited)
     print(len(set(visited)))
+    # print()
     print(options)
     print(len(set(options)))
+    # print()
+    print(height, width, height * width)
     return len(set(options))
 
 
 def traverse(grid, y, x, height, width, dir_idx, start_pos, options_tested, trial):
     directions = (0, -1), (1, 0), (0, 1), (-1, 0)
     # dir_idx = 0
-    visited = [(x, y)]
+    (x, y) = start_pos
+    visited = [(x, y, dir_idx)]
     right_turns = 0
     options = []
     # options_tested = []
+    loop = False
     while 0 < y < height - 1 and 0 < x < width - 1:
         dir_idx = dir_idx % 4
         direction = directions[dir_idx]
         next_i = (x + direction[0], y + direction[1])
         next_box = grid[next_i[1]][next_i[0]]
-        print(f"{dir_idx}: {(x,y)} -> {next_i} {next_box} {right_turns}")
-        # if (x, y) in visited[:-1] and right_turns == 3:
-        #     options.append(next_i)
-        #     if trial:
-        #         return [], options
-        #     right_turns = 0
-        if next_box == "#":
-            if trial and (x, y) in visited[-1]:
-                return visited, options, (x, y)
+        # print(f"{dir_idx}: {(x,y)} -> {next_i} {next_box} {right_turns}")
+        if next_box == "#" or next_box == "O":
+            if (x, y, dir_idx) in visited[:-1]:
+                return visited, options, True
             dir_idx += 1
-            right_turns = right_turns + 1
             continue
-        elif not trial and next_i not in options_tested:
-            original = (x, y)
-            original_dir_idx = dir_idx
-            options_tested.append(next_i)
-            grid[next_i[1]][next_i[0]] = "#"
-            a, b, last_idx = traverse(
-                grid, y, x, height, width, dir_idx, (x, y), options_tested, True
-            )
-            if last_idx == start_pos:
-                options.append(next_i)
-            grid[next_i[1]][next_i[0]] = "."
-            x, y = original
-            dir_idx = original_dir_idx
+        # elif:
+        #     if (x, y, dir_idx) in visited[:-1]:
+        #         return visited, options, True
+        #     dir_idx += 1
+        #     continue
         x, y = next_i
-        visited.append((x, y))
-    return visited, options, (x, y)
+        visited.append((x, y, dir_idx))
+    return visited, options, False
 
 
 if __name__ == "__main__":
-    with io.StringIO(EXAMPLE) as f:
-        print(part_1(f))  # 41
+    # with io.StringIO(EXAMPLE) as f:
+    #     print(part_1(f))  # 41
 
-    with open(INPUT_FILE_PATH) as f:
-        print(part_1(f))  # 5551
+    # with open(INPUT_FILE_PATH) as f:
+    #     print(part_1(f))  # 5551
 
     # TODO infinite loop
     # with io.StringIO(EXAMPLE) as f:
     #     print(part_2(f))
 
-    # with open(INPUT_FILE_PATH) as f:
-    #     print(part_2(f))
+    with open(INPUT_FILE_PATH) as f:
+        print(part_2(f))
