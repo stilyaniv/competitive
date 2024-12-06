@@ -17,6 +17,6 @@ def test_part_2_example():
         assert part_2(f) == 6
 
 
-# def test_part_2_full():
-#     with open(INPUT_FILE_PATH) as f:
-#         assert part_2(f) == 4713
+def test_part_2_full():
+    with open(INPUT_FILE_PATH) as f:
+        assert part_2(f) == 1939

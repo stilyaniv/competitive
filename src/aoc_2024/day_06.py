@@ -54,7 +54,7 @@ def part_1(file):
         visited.append((x, y))
     print(visited)
     print(len(set(visited)))
-    return
+    return len(set(visited))
 
 
 def part_2(file):
@@ -75,26 +75,24 @@ def part_2(file):
     # x1, y1 = (56, 28)
     # grid[y1][x1] = "O"
     # pprint(grid, width=400)
-    # visited, _, is_loop = traverse(grid, y, x, height, width, 0, start_pos, [], False)
+    visited, _, is_loop = traverse(grid, y, x, height, width, 0, start_pos, [], False)
 
-    # TODO extremely slow
+    visited = sorted(visited)
+    # TODO slow
     options = []
-    for y1 in range(height):
-        for x1 in range(width):
-            # for x1, y1, _ in visited:
-            # x1, y1 = (5, 4)  # TODO remove
-            print(x1, y1)
-            is_loop = False
-            if grid[y1][x1] == "#":
-                continue
-            grid[y1][x1] = "O"
-            # pprint(grid)
-            visited, _, is_loop = traverse(
-                grid, y, x, height, width, 0, start_pos, [], False
-            )
-            if is_loop:
-                options.append((x1, y1))
-            grid[y1][x1] = "."
+    for x1, y1, _ in visited:
+        print(x1, y1)
+        is_loop = False
+        if grid[y1][x1] == "#":  # TODO remove these before looping
+            continue
+        grid[y1][x1] = "O"
+        # pprint(grid)
+        visited, _, is_loop = traverse(
+            grid, y, x, height, width, 0, start_pos, [], False
+        )
+        if is_loop:
+            options.append((x1, y1))
+        grid[y1][x1] = "."
 
     print()
     # # print(last_idx)
@@ -139,15 +137,14 @@ def traverse(grid, y, x, height, width, dir_idx, start_pos, options_tested, tria
 
 
 if __name__ == "__main__":
-    # with io.StringIO(EXAMPLE) as f:
-    #     print(part_1(f))  # 41
+    with io.StringIO(EXAMPLE) as f:
+        print(part_1(f))
 
-    # with open(INPUT_FILE_PATH) as f:
-    #     print(part_1(f))  # 5551
+    with open(INPUT_FILE_PATH) as f:
+        print(part_1(f))
 
-    # TODO infinite loop
-    # with io.StringIO(EXAMPLE) as f:
-    #     print(part_2(f))
+    with io.StringIO(EXAMPLE) as f:
+        print(part_2(f))
 
     with open(INPUT_FILE_PATH) as f:
         print(part_2(f))

@@ -118,3 +118,12 @@ elif next_box == 'O':
 
 visited instead of visited[:-1]
 104 74
+
+# Performance improvements
+
+1) put obstacle in every place in grid except default obstacles
+232.1s
+
+2) traverse once with original grid
+put obstacles only in visited paths
+45.62s
