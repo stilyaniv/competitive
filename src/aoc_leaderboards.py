@@ -27,8 +27,8 @@ def download_latest():
         json.dump(result_json, f)
 
 
-def get_latest_status():
-    snapshots = sorted(Path("./resources/aoc_2024/").iterdir())
+def get_latest_status(dir_snapshots):
+    snapshots = sorted(Path(dir_snapshots).iterdir())
     latest = snapshots[-1]
     with open(latest) as f:
         latest_json = json.load(f)
@@ -40,15 +40,15 @@ if __name__ == "__main__":
     https://stackoverflow.com/questions/38231591/split-explode-a-column-of-dictionaries-into-separate-columns-with-pandas
 
     """
+    YEAR = 2024
     # download_latest()
-    latest = get_latest_status()
+    latest = get_latest_status(f"./resources/aoc_{YEAR}/")
     user = latest["members"][AOC_MEMBER_ID]
     pprint(user, indent=2)
+    print(f"Last star TS: {datetime.datetime.fromtimestamp(user['last_star_ts'])}")
 
     day1_ts = latest["day1_ts"]
-
-    print(datetime.datetime.fromtimestamp(day1_ts))
-    print(datetime.datetime.fromtimestamp(user["last_star_ts"]))
+    print(f"Day 1: {datetime.datetime.fromtimestamp(day1_ts)}")
 
     df = pd.DataFrame.from_dict(latest["members"]).T
     df["local_score"] = df["local_score"].astype(int)
@@ -78,18 +78,13 @@ if __name__ == "__main__":
             rank_name = col.replace("get_star_ts", "rank")
             df[rank_name] = df[col].rank(ascending=False)
             rank_column_names.append(rank_name)
-    # pd.to_datetime(df['1.1.get_star_ts'], unit='s')
-    # df["1.1"] = df['1.1.get_star_ts'].apply(lambda row: (datetime.datetime.fromtimestamp(day1_ts) + datetime.timedelta(days=1) -
-    #                                                      datetime.datetime.fromtimestamp(row)).seconds)
-    # df["5.1"] = df['5.1.get_star_ts'].apply(lambda row: (datetime.datetime.fromtimestamp(day1_ts) + datetime.timedelta(days=5) -
-    #                                                      datetime.datetime.fromtimestamp(row)).seconds)
-    # df["5.2"] = df['5.2.get_star_ts'].apply(lambda row: (datetime.datetime.fromtimestamp(day1_ts) + datetime.timedelta(days=5) -
-    #                                                      datetime.datetime.fromtimestamp(row)).seconds)
-
     df = df.drop(["completion_day_level"], axis=1)
+    # pd.to_datetime(df['1.1.get_star_ts'], unit='s')
 
-    # TODO iterate over all days
-    # fig = px.bar(df, x="name", y=["1.1", "5.1", "5.2"])
+    participants = len(latest["members"])
+    print(f"Participants: {participants}")
+    print(f"Max score: {participants*len(rank_column_names)}")
+
     df = df.sort_values(["local_score"], ascending=False)
     fig = px.bar(df, x="name", y=sorted(rank_column_names))
     fig.show()
