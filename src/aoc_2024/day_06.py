@@ -23,7 +23,7 @@ INPUT_FILE_PATH = f"{Path(__file__).parent / Path(__file__).stem}.txt"
 
 
 def part_1(file):
-    # lines = [[char for char in line.strip()] for line in file]
+
     grid = []
     for y, line in enumerate(file):
         row = []
@@ -75,7 +75,7 @@ def part_2(file):
     # x1, y1 = (56, 28)
     # grid[y1][x1] = "O"
     # pprint(grid, width=400)
-    visited, _, is_loop = traverse(grid, y, x, height, width, 0, start_pos, [], False)
+    visited, _, is_loop = traverse(grid, y, x, height, width, 0, start_pos)
 
     visited = sorted(visited)
     # TODO slow
@@ -83,10 +83,9 @@ def part_2(file):
     for x1, y1, _ in visited:
         print(x1, y1)
         is_loop = False
-        if grid[y1][x1] == "#":  # TODO remove these before looping
+        if grid[y1][x1] == "#":
             continue
         grid[y1][x1] = "O"
-        # pprint(grid)
         visited, _, is_loop = traverse(
             grid, y, x, height, width, 0, start_pos, [], False
         )
@@ -94,43 +93,26 @@ def part_2(file):
             options.append((x1, y1))
         grid[y1][x1] = "."
 
-    print()
-    # # print(last_idx)
-    print(visited)
-    print(len(set(visited)))
-    # print()
-    print(options)
-    print(len(set(options)))
-    # print()
-    print(height, width, height * width)
     return len(set(options))
 
 
-def traverse(grid, y, x, height, width, dir_idx, start_pos, options_tested, trial):
+def traverse(grid, y, x, height, width, dir_idx, start_pos):
     directions = (0, -1), (1, 0), (0, 1), (-1, 0)
-    # dir_idx = 0
     (x, y) = start_pos
     visited = [(x, y, dir_idx)]
-    right_turns = 0
     options = []
-    # options_tested = []
-    loop = False
+
     while 0 < y < height - 1 and 0 < x < width - 1:
         dir_idx = dir_idx % 4
         direction = directions[dir_idx]
         next_i = (x + direction[0], y + direction[1])
         next_box = grid[next_i[1]][next_i[0]]
-        # print(f"{dir_idx}: {(x,y)} -> {next_i} {next_box} {right_turns}")
+        print(f"{dir_idx}: {(x,y)} -> {next_i} {next_box}")
         if next_box == "#" or next_box == "O":
             if (x, y, dir_idx) in visited[:-1]:
                 return visited, options, True
             dir_idx += 1
             continue
-        # elif:
-        #     if (x, y, dir_idx) in visited[:-1]:
-        #         return visited, options, True
-        #     dir_idx += 1
-        #     continue
         x, y = next_i
         visited.append((x, y, dir_idx))
     return visited, options, False
