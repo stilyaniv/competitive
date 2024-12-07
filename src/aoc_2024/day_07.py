@@ -3,6 +3,7 @@ https://adventofcode.com/
 """  # TODO link to problem
 import io
 from pathlib import Path
+from pprint import pprint
 
 EXAMPLE = """\
 190: 10 19
@@ -16,7 +17,6 @@ EXAMPLE = """\
 292: 11 6 16 20
 """  # TODO small size example from problem
 
-EXAMPLE = """7290: 6 8 6 15"""
 
 INPUT_FILE_PATH = f"{Path(__file__).parent / Path(__file__).stem}.txt"
 
@@ -52,17 +52,21 @@ def part_1(file):
         els = [int(e) for e in els.strip().split()]
         total = int(total)
         print(total, els)
-        if comb(els[:-1], els[-1], total):
+        if comb1(els[:-1], els[-1], total):
             ans += total
     return ans
 
 
-# doesn't work due to
-# """7290: 6 8 6 15"""
-# causing a floating point result for integer division
-
-
-def comb(head, tail, total):
+def comb2_reduction(head, tail, total):
+    """
+    from itertools import permutations
+    import pprint
+    from pprint import pprint
+        doesn't work due to
+        7290: 6 8 6 15
+        causing a floating point result for integer division
+        even after fixing that it's tricky due to floating point .0
+    """
     if len(head) == 1:
         # tail = tail[0]
         head = head[0]
@@ -86,10 +90,79 @@ def comb(head, tail, total):
             splits.extend(split)
 
         return (
-            comb(head[:-1], head[-1], total - tail)
-            or comb(head[:-1], head[-1], total / tail)
-            or any([comb(head[:-1], head[-1], t) for t in splits])
+            comb2_reduction(head[:-1], head[-1], total - tail)
+            or comb2_reduction(head[:-1], head[-1], total / tail)
+            or any([comb2_reduction(head[:-1], head[-1], t) for t in splits])
         )
+
+
+# def comb2(head, tail, total):
+#     if len(head) == 1:
+#         # tail = tail[0]
+#         head = head[0]
+#         # print(head, tail)
+#         return (
+#             head * tail, head + tail, int(str(head) + str(tail))
+#         )
+#     else:
+#         for option in
+#         return (
+#             tail + comb2(head[:-1], head[-1]) == total
+#             or comb2(head[:-1], head[-1]) == total
+#             or any([comb2(head[:-1], head[-1], t) for t in splits] == total)
+#         )
+
+
+EXAMPLE = """7290: 6 8 6 15"""
+
+EXAMPLE = """6815: 6 8 15"""
+
+
+def comb2(head, tail, total, all_combos=[]):
+    if len(head) == 1:
+        # tail = tail[0]
+        head = head[0]
+        # print(head, tail)
+        return (head * tail, head + tail, int(str(head) + str(tail)))
+        return (
+            (head, "*", tail),
+            (head, "+", tail),
+            (head, "||", tail),
+        )
+    else:
+        new_head = head[:-1]
+        new_tail = head[-1]
+        combos = comb2(new_head, new_tail, total, all_combos)
+
+        for combo in combos:
+            all_combos.extend(
+                [
+                    (combo, "+", tail),
+                    (combo, "*", tail),
+                    (combo, "||", tail),
+                ]
+            )
+            # all_combos.extend([
+            #     (combo, '+', tail),
+            #     (combo, '*', tail),
+            #     (combo, '||', tail),
+            # ])
+            # pprint(all_combos)
+
+        # for combo in comb2(new_head, new_tail, total, combs):
+        #     # combo = comb2(new_head, new_tail, total, combs)
+        #     combos.append((
+        #         (("*", tail),  combo),
+        #         (("+", tail),  combo),
+        #         (("||", tail),  combo),
+        #     ))
+        return all_combos
+
+        # return (
+        #     tail + comb2(new_head, new_tail, total) == total
+        #     or tail * comb2(new_head, new_tail, total) == total
+        #     or int(str(tail) + str(comb2(new_head, new_tail, total)) == total
+        # )
 
 
 def part_2(file):
@@ -99,10 +172,28 @@ def part_2(file):
         total, els = line.strip().split(":")
         els = [int(e) for e in els.strip().split()]
         total = int(total)
-        print(total, els)
-        if comb(els[:-1], els[-1], total):
+        # print(total, els)
+        combos = comb2(els[:-1], els[-1], total, [])
+        # pprint(combos, width=150)
+        for combo in combos:
             ans += total
+            print(combo)
     return ans
+
+
+# def part_2(file):
+#     ans = 0
+#     for line in file:
+#         # print(total, line)
+#         total, els = line.strip().split(":")
+#         els = [int(e) for e in els.strip().split()]
+#         total = int(total)
+#         print(total, els)
+
+#         from itertools import product
+#         for item in product([1, 2, 3, 4], [1, 2]):
+#             print(item)
+#     return ans
 
 
 if __name__ == "__main__":
