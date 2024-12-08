@@ -88,13 +88,12 @@ if __name__ == "__main__":
 
     df = df.sort_values(["local_score"], ascending=False).reset_index(drop=True)
 
+    print(df)
+
     if AOC_MEMBER_ID:
         user = latest["members"][AOC_MEMBER_ID]
         current_user_name = user["name"]
-        pprint(user, indent=2)
         print(f"Last star TS: {datetime.datetime.fromtimestamp(user['last_star_ts'])}")
-
-    print(df)
 
     df["calculated_score"] = df.loc[:, star_score_cols].sum(axis=1)
     try:
