@@ -1,5 +1,6 @@
 import datetime
 import json
+import logging
 import os
 from pathlib import Path
 from pprint import pprint
@@ -7,6 +8,9 @@ from pprint import pprint
 import pandas as pd
 import plotly.express as px
 import requests
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG)
 
 AOC_URL_LEADERBOARD = os.getenv("AOC_URL_LEADERBOARD", "")
 AOC_COOKIE = os.getenv("AOC_COOKIE", "")
@@ -35,6 +39,12 @@ def get_latest_status(dir_snapshots):
     return latest_json
 
 
+pd.set_option("display.max_rows", None)
+pd.set_option("display.max_columns", None)
+pd.set_option("display.width", 120)
+
+# TODO make sure ties are shown correctly
+
 if __name__ == "__main__":
     """
     https://stackoverflow.com/questions/38231591/split-explode-a-column-of-dictionaries-into-separate-columns-with-pandas
@@ -43,13 +53,6 @@ if __name__ == "__main__":
     YEAR = 2024
     download_latest()
     latest = get_latest_status(f"./scratch/aoc_{YEAR}/")
-    if AOC_MEMBER_ID:
-        user = latest["members"][AOC_MEMBER_ID]
-        pprint(user, indent=2)
-        print(f"Last star TS: {datetime.datetime.fromtimestamp(user['last_star_ts'])}")
-
-    day1_ts = latest["day1_ts"]
-    print(f"Day 1: {datetime.datetime.fromtimestamp(day1_ts)}")
 
     df = pd.DataFrame.from_dict(latest["members"]).T
     df["local_score"] = df["local_score"].astype(int)
@@ -61,22 +64,49 @@ if __name__ == "__main__":
         [df.reset_index(drop=True), df_star_cols_norm],
         axis=1,
     )
-
+    df = df.drop(["completion_day_level"], axis=1)
     df = df.loc[:, ~df.columns.str.endswith("star_index")]
 
-    rank_column_names = []
+    participants = len(latest["members"])
+    star_score_cols = []
     for col in df.columns:
         if col.endswith("get_star_ts"):
-            rank_name = col.replace("get_star_ts", "rank")
-            df[rank_name] = df[col].rank(ascending=False)
-            rank_column_names.append(rank_name)
-    df = df.drop(["completion_day_level"], axis=1)
-    # pd.to_datetime(df['1.1.get_star_ts'], unit='s')
-
-    participants = len(latest["members"])
-    print(f"Participants: {participants}")
-    print(f"Max score: {participants*len(rank_column_names)}")
+            ts_col = col
+            df[ts_col] = pd.to_datetime(df[ts_col], unit="s")
+            rank_col = ts_col.replace("get_star_ts", "daily_rank")
+            df[rank_col] = (
+                df[ts_col].rank(na_option="bottom", ascending=True).astype(int)
+            )
+            star_score_col = ts_col.replace("get_star_ts", "star_score")
+            df[star_score_col] = participants + 1 - df[rank_col]
+            df.loc[df[ts_col].isna(), star_score_col] = 0
+            star_score_cols.append(star_score_col)
+    star_score_cols = sorted(star_score_cols)
 
     df = df.sort_values(["local_score"], ascending=False)
-    fig = px.bar(df, x="name", y=sorted(rank_column_names))
+
+    if AOC_MEMBER_ID:
+        user = latest["members"][AOC_MEMBER_ID]
+        pprint(user, indent=2)
+        print(f"Last star TS: {datetime.datetime.fromtimestamp(user['last_star_ts'])}")
+
+    print(df)
+
+    df["calculated_score"] = df.loc[:, star_score_cols].sum(axis=1)
+    try:
+        assert (df["local_score"] == df["calculated_score"]).all()
+    except AssertionError:
+        logger.error(
+            "The chart may be showing incorrect daily scores as the scores from the API do not match the calculated scores. This is likely due to a mismatch between the scoring algorithms of this program and AoC."
+        )
+
+    day1_ts = latest["day1_ts"]
+    print(f"Day 1: {datetime.datetime.fromtimestamp(day1_ts)}")
+
+    print(f"Participants: {participants}")
+    print(f"Max score: {participants*len(star_score_cols)}")
+
+    df["name_with_score"] = df["local_score"].astype(str) + " ★ " + df["name"]
+
+    fig = px.bar(df, x="name_with_score", y=sorted(star_score_cols))
     fig.show()
