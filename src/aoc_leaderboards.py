@@ -80,25 +80,3 @@ if __name__ == "__main__":
     df = df.sort_values(["local_score"], ascending=False)
     fig = px.bar(df, x="name", y=sorted(rank_column_names))
     fig.show()
-
-    # TODO create bump chart with parallel_coordinates
-    # Load the iris dataset provided by the library
-    # df = px.data.iris()
-
-    # Create the chart:
-    # fig = px.parallel_coordinates(
-    #     df,
-    #     color="local_score",
-    #     # labels={"last_star_ts": "last_star_ts", "stars": "stars", "local_score": "local_score"},
-    #     dimensions=['last_star_ts', 'stars'],
-    #     # labels={"species_id": "Species", "sepal_width": "Sepal Width", "sepal_length": "Sepal Length",
-    #     #         "petal_width": "Petal Width", "petal_length": "Petal Length", },
-    #     color_continuous_scale=px.colors.diverging.Tealrose,
-    #     color_continuous_midpoint=2
-    # )
-
-    # # Hide the color scale that is useless in this case
-    # fig.update_layout(coloraxis_showscale=False)
-
-    # # Show the plot
-    # fig.show()
