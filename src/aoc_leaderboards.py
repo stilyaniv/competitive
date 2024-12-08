@@ -67,7 +67,7 @@ if __name__ == "__main__":
     df = df.drop(["completion_day_level"], axis=1)
     df = df.loc[:, ~df.columns.str.endswith("star_index")]
 
-    participants = len(latest["members"])
+    num_players = len(latest["members"])
     star_score_cols = []
     for col in df.columns:
         if col.endswith("get_star_ts"):
@@ -78,7 +78,7 @@ if __name__ == "__main__":
                 df[ts_col].rank(na_option="bottom", ascending=True).astype(int)
             )
             star_score_col = ts_col.replace("get_star_ts", "star_score")
-            df[star_score_col] = participants + 1 - df[rank_col]
+            df[star_score_col] = num_players + 1 - df[rank_col]
             df.loc[df[ts_col].isna(), star_score_col] = 0
             star_score_cols.append(star_score_col)
     star_score_cols = sorted(star_score_cols)
@@ -103,10 +103,19 @@ if __name__ == "__main__":
     day1_ts = latest["day1_ts"]
     print(f"Day 1: {datetime.datetime.fromtimestamp(day1_ts)}")
 
-    print(f"Participants: {participants}")
-    print(f"Max score: {participants*len(star_score_cols)}")
+    max_score = num_players * len(star_score_cols)
+    print(f"Number of players: {num_players}")
+    print(f"Max score: {max_score}")
 
     df["name_with_score"] = df["local_score"].astype(str) + " ★ " + df["name"]
 
-    fig = px.bar(df, x="name_with_score", y=sorted(star_score_cols))
+    fig = px.bar(
+        df,
+        x="name_with_score",
+        y=sorted(star_score_cols),
+        labels={
+            "name_with_score": "Participant and total score",
+            "value": "Score per star",
+        },
+    )
     fig.show()
