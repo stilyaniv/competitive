@@ -47,7 +47,6 @@ def create_grid(file, cell_char="."):
 def part_1(file):
     grid, x_len, y_len, special_chars = create_grid(file)
     unique_placements = set()
-    # pprint(grid)
     pprint(special_chars)
     antis = {}
     special_chars = {k: special_chars[k] for k in special_chars if k != "."}
@@ -56,8 +55,6 @@ def part_1(file):
             for j in range(i + 1, len(pairs)):
                 x1, y1 = pair1
                 x2, y2 = pairs[j]
-                # x_d = x1 - x2
-                # y_d = y1 - y2
                 x_d = x2 - x1
                 y_d = y2 - y1
                 anti_nodes = [(x1 - x_d, y1 - y_d), (x2 + x_d, y2 + y_d)]

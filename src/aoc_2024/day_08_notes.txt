@@ -1,0 +1,77 @@
+# simplified explainer
+
+9 · · · · · · · · · ·
+8 · · · # · · · · · ·
+7 # · · · · · · · · ·
+6 · · · · a · · · · ·
+5 · · · · · · · · a ·
+4 · · · · · a · · · ·
+3 · · # · · · · · · ·
+2 · · · · · · # · · ·
+1 · · · · · · · · · ·
+0 · · · · · · · · · ·
+  0 1 2 3 4 5 6 7 8 9 
+
+# actual example input
+1 · · · · · · · · · · · ·
+0 · · · · · · · · 0 · · ·
+9 · · · · · 0 · · · · · ·
+8 · · · · · · · 0 · · · ·
+7 · · · · 0 · · · · · · ·
+6 · · · · · · A · · · · ·
+5 · · · · · · · · · · · ·
+4 · · · · · · · · · · · ·
+3 · · · · · · · · A · · ·
+2 · · · · · · · · · A · ·
+1 · · · · · · · · · · · ·
+0 · · · · · · · · · · · ·
+  0 1 2 3 4 5 6 7 8 9 0 1 
+
+# example output 
+
+                       1 1
+   0 1 2 3 4 5 6 7 8 9 0 1 
+ 0 · · · · · · # · · · · #
+ 1 · · · # · · · · 0 · · · <- 0 produces overlapping
+ 2 · · · · # 0 · · · · # ·
+ 3 · · # · · · · 0 · · · · <- 0 produces overlapping
+ 4 · · · · 0 · · · · # · ·
+ 5 · # · · · · A · · · · · <- A overlaps with #
+ 6 · · · # · · · · · · · ·
+ 7 # · · · · · · # · · · ·
+ 8 · · · · · · · · A · · ·
+ 9 · · · · · · · · · A · · 
+10 · · · · · · · · · · # ·
+11 · · · · · · · · · · # ·
+
+-> 13 unique # and # overlapping with A
+
+4 # · · · 
+3 · A · · 
+2 · · A · 
+1 · · · # 
+  7 8 9 0
+
+  (8, 3)
+        (9, 2)
+
+ '0': [(8, 1), (5, 2), (7, 3), (4, 4)],
+ 'A': [(6, 5), (8, 8), (9, 9)]}
+
+ '0'
+ (8, 1), (5, 2) -> (11, 1), (2,3)
+ (8, 1), (4, 4) -> (0, 7), (12,-2)
+
+
+
+# delays 
+* got stuck due to grid reading coordinates for y in the wrong direction 
+* need to subtract coordinates in the same direction as I'm then adding for the new pairs
+- wrong:
+        the final node is x+d but I sutbracted x1 - x2
+                x_d = x1 - x2
+                y_d = y1 - y2
+                (x1 - x_d, y1 - y_d), (x2 + x_d, y2 + y_d)]
+- right:
+                x_d = x2 - x1
+                y_d = y2 - y1
