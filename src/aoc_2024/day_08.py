@@ -71,10 +71,29 @@ def part_1(file):
 
 
 def part_2(file):
-    for line in file:
-        pass
+    grid, x_len, y_len, special_chars = create_grid(file)
+    unique_placements = set()
+    pprint(special_chars)
+    antis = {}
+    special_chars = {k: special_chars[k] for k in special_chars if k != "."}
+    for char, pairs in special_chars.items():
+        for i in range(len(pairs)):
+            for j in range(i + 1, len(pairs)):
+                x1, y1 = pairs[i]
+                x2, y2 = pairs[j]
+                x_d = x2 - x1
+                y_d = y2 - y1
+                anti_nodes = [(x1 - x_d, y1 - y_d), (x2 + x_d, y2 + y_d)]
+                if char in antis:
+                    antis[char] += anti_nodes
+                else:
+                    antis[char] = anti_nodes
+                for anti_node in anti_nodes:
+                    if 0 <= anti_node[0] < x_len and 0 <= anti_node[1] < y_len:
+                        unique_placements.update({anti_node})
 
-    return
+    print(unique_placements)
+    return len(unique_placements)
 
 
 if __name__ == "__main__":
