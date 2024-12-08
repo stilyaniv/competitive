@@ -1,17 +1,17 @@
-import plotly.express as px
-import pandas as pd
-from pprint import pprint
-from pathlib import Path
-import requests
-import json
 import datetime
+import json
 import os
+from pathlib import Path
+from pprint import pprint
 
-AOC_COOKIE = os.getenv("AOC_COOKIE")
+import pandas as pd
+import plotly.express as px
+import requests
+
+AOC_URL_LEADERBOARD = os.getenv("AOC_URL_LEADERBOARD", "")
+AOC_COOKIE = os.getenv("AOC_COOKIE", "")
 
 AOC_MEMBER_ID = os.getenv("AOC_MEMBER_ID")
-
-AOC_URL_LEADERBOARD = os.getenv("AOC_URL_LEADERBOARD")
 
 
 def download_latest():
@@ -21,9 +21,9 @@ def download_latest():
     result_json = response.json()
     aoc_year = result_json["event"]
     owner_id = result_json["owner_id"]
-    with open(
-        f"./resources/aoc_{aoc_year}/private_leadboard_{owner_id}_{ts_now}.json", "w"
-    ) as f:
+    snapshots_path = f"./scratch/aoc_{aoc_year}/"
+    os.makedirs(snapshots_path, exist_ok=True)
+    with open(f"{snapshots_path}/private_leadboard_{owner_id}_{ts_now}.json", "w") as f:
         json.dump(result_json, f)
 
 
@@ -41,11 +41,12 @@ if __name__ == "__main__":
 
     """
     YEAR = 2024
-    # download_latest()
-    latest = get_latest_status(f"./resources/aoc_{YEAR}/")
-    user = latest["members"][AOC_MEMBER_ID]
-    pprint(user, indent=2)
-    print(f"Last star TS: {datetime.datetime.fromtimestamp(user['last_star_ts'])}")
+    download_latest()
+    latest = get_latest_status(f"./scratch/aoc_{YEAR}/")
+    if AOC_MEMBER_ID:
+        user = latest["members"][AOC_MEMBER_ID]
+        pprint(user, indent=2)
+        print(f"Last star TS: {datetime.datetime.fromtimestamp(user['last_star_ts'])}")
 
     day1_ts = latest["day1_ts"]
     print(f"Day 1: {datetime.datetime.fromtimestamp(day1_ts)}")
@@ -55,9 +56,9 @@ if __name__ == "__main__":
     df["stars"] = df["stars"].astype(int)
 
     df = df.sort_values(["local_score"], ascending=False)
-
+    df_star_cols_norm = pd.json_normalize(df["completion_day_level"])
     df = pd.concat(
-        [df.reset_index(drop=True), pd.json_normalize(df["completion_day_level"])],
+        [df.reset_index(drop=True), df_star_cols_norm],
         axis=1,
     )
 
