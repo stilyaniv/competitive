@@ -43,8 +43,6 @@ pd.set_option("display.max_rows", None)
 pd.set_option("display.max_columns", None)
 pd.set_option("display.width", 120)
 
-# TODO make sure ties are shown correctly
-
 if __name__ == "__main__":
     """
     https://stackoverflow.com/questions/38231591/split-explode-a-column-of-dictionaries-into-separate-columns-with-pandas
@@ -82,11 +80,17 @@ if __name__ == "__main__":
             df.loc[df[ts_col].isna(), star_score_col] = 0
             star_score_cols.append(star_score_col)
     star_score_cols = sorted(star_score_cols)
+    df["local_rank"] = (
+        df["local_score"]
+        .rank(na_option="bottom", method="min", ascending=False)
+        .astype(int)
+    )
 
-    df = df.sort_values(["local_score"], ascending=False)
+    df = df.sort_values(["local_score"], ascending=False).reset_index(drop=True)
 
     if AOC_MEMBER_ID:
         user = latest["members"][AOC_MEMBER_ID]
+        current_user_name = user["name"]
         pprint(user, indent=2)
         print(f"Last star TS: {datetime.datetime.fromtimestamp(user['last_star_ts'])}")
 
@@ -107,7 +111,18 @@ if __name__ == "__main__":
     print(f"Number of players: {num_players}")
     print(f"Max score: {max_score}")
 
-    df["name_with_score"] = df["local_score"].astype(str) + " ★ " + df["name"]
+    df["name_with_score"] = (
+        df["local_rank"].astype(str)
+        + ") "
+        + df["name"]
+        + " ★ "
+        + df["local_score"].astype(str)
+    )
+
+    if current_user_name:
+        df.loc[df["name"] == current_user_name, ["name_with_score"]] = (
+            df.loc[df["name"] == current_user_name, ["name_with_score"]] + " ⭐"
+        )
 
     fig = px.bar(
         df,
