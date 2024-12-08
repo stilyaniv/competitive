@@ -6,9 +6,12 @@ from pathlib import Path
 
 EXAMPLE = """\
 
-"""  # TODO small size example from problem
+"""
 
 INPUT_FILE_PATH = f"{Path(__file__).parent / Path(__file__).stem}.txt"
+
+PART1_EXAMPLE_OUTPUT = None
+PART2_EXAMPLE_OUTPUT = None
 
 
 def part_1(file):
@@ -27,13 +30,13 @@ def part_2(file):
 
 if __name__ == "__main__":
     with io.StringIO(EXAMPLE) as f:
-        print(part_1(f))
+        print(f"{part_1(f)} == {PART1_EXAMPLE_OUTPUT}?")
 
     with open(INPUT_FILE_PATH) as f:
         print(part_1(f))
 
-    # with io.StringIO(EXAMPLE) as f:
-    #     print(part_2(f))
+    with io.StringIO(EXAMPLE) as f:
+        print(f"{part_2(f)} == {PART2_EXAMPLE_OUTPUT}?")
 
-    # with open(INPUT_FILE_PATH) as f:
-    #     print(part_2(f))
+    with open(INPUT_FILE_PATH) as f:
+        print(part_2(f))
