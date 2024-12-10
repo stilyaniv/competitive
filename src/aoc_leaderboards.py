@@ -3,7 +3,6 @@ import json
 import logging
 import os
 from pathlib import Path
-from pprint import pprint
 
 import pandas as pd
 import plotly.express as px
@@ -11,6 +10,10 @@ import requests
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
+
+pd.set_option("display.max_rows", None)
+pd.set_option("display.max_columns", None)
+pd.set_option("display.width", 180)
 
 AOC_URL_LEADERBOARD = os.getenv("AOC_URL_LEADERBOARD", "")
 AOC_COOKIE = os.getenv("AOC_COOKIE", "")
@@ -38,10 +41,6 @@ def get_latest_status(dir_snapshots):
         latest_json = json.load(f)
     return latest_json
 
-
-pd.set_option("display.max_rows", None)
-pd.set_option("display.max_columns", None)
-pd.set_option("display.width", 120)
 
 if __name__ == "__main__":
     """
