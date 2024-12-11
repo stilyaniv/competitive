@@ -13,3 +13,4 @@ env/
 .env
 
 scratch/
+src/aoc_2024/inputs/*
