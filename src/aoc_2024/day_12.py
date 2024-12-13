@@ -47,7 +47,7 @@ def create_grid(file):
 
 def traverse(grid, x_len, y_len, x, y, square, visited):
     # area, perim = 0, 0
-    if not (0 <= x < x_len and 0 <= y < y_len):
+    if not (0 <= x < x_len and 0 <= y < y_len) or (x, y) in visited:
         # visited.extend([(x, y)])
         return
     if grid[y][x] != square:
@@ -59,12 +59,14 @@ def traverse(grid, x_len, y_len, x, y, square, visited):
     # right = grid[y][x+1]
     # up = grid[y-1][x]
     # down = grid[y+1][x]
-    # area += 1
+    area = 0
+    perim = 0
+    area += 1
     # if ()
-        # left = traverse(grid, x_len, y_len, x - 1, y, square)
-        right = traverse(grid, x_len, y_len, x + 1, y, square, visited)
-        # up = traverse(grid, x_len, y_len, x, y - 1, square)
-        # down = traverse(grid, x_len, y_len, x, y + 1, square)
+    left = traverse(grid, x_len, y_len, x - 1, y, square, visited)
+    right = traverse(grid, x_len, y_len, x + 1, y, square, visited)
+    up = traverse(grid, x_len, y_len, x, y - 1, square, visited)
+    down = traverse(grid, x_len, y_len, x, y + 1, square, visited)
     # loc = right[0]
     # visited.extend(loc)
     # area += right[1]
@@ -73,12 +75,16 @@ def traverse(grid, x_len, y_len, x, y, square, visited):
     # print(right)
     # print((x, y))
     # return visited, area, perim
-    return 0, 0
+    return garden, area, perim
 
 
 def part_1(file):
     grid, x_len, y_len, squares = create_grid(file)
 
+<<<<<<< HEAD
+    total_area = 0
+=======
+>>>>>>> f11ae25aae16f10a0aae2b543d9efe156dc6a23a
     perim = []
     visited = []
     for y in range(y_len):
@@ -86,14 +92,17 @@ def part_1(file):
             # if (x, y) in not:
             #     continue
             square = grid[y][x]
-            area, perim = traverse(grid, x_len, y_len, x, y, square, visited)
+            # square = grid[0][0]
+            garden, area, perim = traverse(grid, x_len, y_len, 0, 0, square, visited)
+            # break
             # if (x, y) not in gardens:
             #     gardens[(x, y)] = (area, perim)
             #     mapped_squares.extend(visited)
 
             # grid[y][x] = Square(x, y, grid)
+            total_area += len(visited)
 
-    pprint(visited)
+    pprint(set(visited))
     return
 
 

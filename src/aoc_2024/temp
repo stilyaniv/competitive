@@ -1,0 +1,85 @@
+"""
+https://adventofcode.com/
+"""  # TODO link to problem
+
+import io
+from pathlib import Path
+
+EXAMPLE = """\
+2333133121414131402
+"""
+
+PART2_EXAMPLE_OUTPUT = 2858
+
+
+def part_2(file):
+    padded_line = []
+    line = file.readline().strip() + "0"
+    file_id = 0
+    for i in range(0, len(line), 2):
+        padded_line.extend(int(line[i]) * [str(file_id)])
+        padded_line.extend(int(line[i + 1]) * ["."])
+        file_id += 1
+
+    first_empty = 0
+    file_start = len(padded_line) - 1
+    file_end = len(padded_line)
+    new_line = list(padded_line)
+    files_moved = set()
+    files_read = set()
+    while first_empty < file_start:
+        if new_line[file_end-1] == ".":
+            file_start -= 1
+            file_end -= 1
+        elif new_line[first_empty] != ".":
+            first_empty += 1
+        elif new_line[file_end-1] != ".":
+            empty_start = empty_end = first_empty
+            while new_line[file_start] == new_line[file_end-1]:
+                file_start -= 1
+            file_start += 1
+            file_size = file_end - file_start
+
+            found = False
+
+            file_id = int(new_line[file_start])
+            if file_id in files_read:
+                found = True
+
+            while not found and empty_end < file_start:
+                while new_line[empty_start] != ".":
+                    empty_start += 1
+
+                empty_end = empty_start
+                while new_line[empty_end] == ".":
+                    empty_end += 1
+
+                space_size = empty_end - empty_start
+                if space_size >= file_size:
+                    (
+                        new_line[empty_start: empty_start + file_size],
+                        new_line[file_start:file_end],
+                    ) = (
+                        new_line[file_start:file_end],
+                        new_line[empty_start: empty_start + file_size],
+                    )
+                    found = True
+                    files_moved.update([file_id])
+                else:
+                    empty_start += space_size
+            file_end = file_start
+            file_start -= 1
+            files_read.update([file_id])
+
+    checksum_pos = 0
+    for pos, item in enumerate(new_line):
+        if item == ".":
+            continue
+        checksum_pos += pos * int(item)
+    return checksum_pos
+
+
+if __name__ == "__main__":
+
+    with io.StringIO(EXAMPLE) as f:
+        print(f"{part_2(f)} == {PART2_EXAMPLE_OUTPUT}?")
