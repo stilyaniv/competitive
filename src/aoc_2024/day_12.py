@@ -45,28 +45,34 @@ def create_grid(file):
     return grid, x_len, y_len, special_chars
 
 
-def traverse(grid, x_len, y_len, x, y, square, visited):
+def traverse(grid, x_len, y_len, x, y, square, visited, garden):
     # area, perim = 0, 0
-    if not (0 <= x < x_len and 0 <= y < y_len) or (x, y) in visited:
+    if (x, y) in visited and grid[y][x] == square:
+        return 0
+    if (x, y) in visited and grid[y][x] != square:
+        return 1
+    if not (0 <= x < x_len and 0 <= y < y_len):
         # visited.extend([(x, y)])
-        return
+        return 1
     if grid[y][x] != square:
         # return [(x, y)], 0, 1
-        return
-    if grid[y][x] == square:
+        return 1
+    if (x, y) not in visited and grid[y][x] == square:
+        garden.extend([(x, y)])
         visited.extend([(x, y)])
+        # return 0
     # left = grid[y][x-1]
     # right = grid[y][x+1]
     # up = grid[y-1][x]
     # down = grid[y+1][x]
     area = 0
-    perim = 0
+    # perim = 0
     area += 1
     # if ()
-    left = traverse(grid, x_len, y_len, x - 1, y, square, visited)
-    right = traverse(grid, x_len, y_len, x + 1, y, square, visited)
-    up = traverse(grid, x_len, y_len, x, y - 1, square, visited)
-    down = traverse(grid, x_len, y_len, x, y + 1, square, visited)
+    left = traverse(grid, x_len, y_len, x - 1, y, square, visited, garden)
+    right = traverse(grid, x_len, y_len, x + 1, y, square, visited, garden)
+    up = traverse(grid, x_len, y_len, x, y - 1, square, visited, garden)
+    down = traverse(grid, x_len, y_len, x, y + 1, square, visited, garden)
     # loc = right[0]
     # visited.extend(loc)
     # area += right[1]
@@ -75,35 +81,37 @@ def traverse(grid, x_len, y_len, x, y, square, visited):
     # print(right)
     # print((x, y))
     # return visited, area, perim
-    return garden, area, perim
+    perim = left + right + up + down
+    return perim
 
 
 def part_1(file):
     grid, x_len, y_len, squares = create_grid(file)
 
-<<<<<<< HEAD
-    total_area = 0
-=======
->>>>>>> f11ae25aae16f10a0aae2b543d9efe156dc6a23a
-    perim = []
+    total_area, total_price = 0, 0
     visited = []
     for y in range(y_len):
         for x in range(x_len):
             # if (x, y) in not:
             #     continue
+            # x, y = 2, 5
             square = grid[y][x]
             # square = grid[0][0]
-            garden, area, perim = traverse(grid, x_len, y_len, 0, 0, square, visited)
+            garden = []
+            perim = traverse(grid, x_len, y_len, x, y, square, visited, garden)
             # break
             # if (x, y) not in gardens:
             #     gardens[(x, y)] = (area, perim)
             #     mapped_squares.extend(visited)
 
             # grid[y][x] = Square(x, y, grid)
-            total_area += len(visited)
-
-    pprint(set(visited))
-    return
+            total_area += len(garden)
+            price = len(garden) * perim
+            total_price += price
+            if garden or perim:
+                print(f"{square}: {len(garden)} * {perim} = {price}")
+    # pprint(set(visited))
+    return total_price
 
 
 class Square:
@@ -158,7 +166,7 @@ def part_1_objects(file):
 
 
 def part_1_left_to_right(file):
-    """ 
+    """
     traverse left to right top to bottom
     doesn't work without extra changes as we create new gardens too early
     """
@@ -215,11 +223,11 @@ def part_2(file):
 
 
 if __name__ == "__main__":
-    with io.StringIO(EXAMPLE) as f:
-        print(f"{part_1(f)} == {PART1_EXAMPLE_OUTPUT}?")
+    # with io.StringIO(EXAMPLE) as f:
+    #     print(f"{part_1(f)} == {PART1_EXAMPLE_OUTPUT}?")
 
-    # with open(INPUT_FILE_PATH) as f:
-    #     print(part_1(f))
+    with open(INPUT_FILE_PATH) as f:
+        print(part_1(f))
 
     # with io.StringIO(EXAMPLE) as f:
     #     print(f"{part_2(f)} == {PART2_EXAMPLE_OUTPUT}?")
