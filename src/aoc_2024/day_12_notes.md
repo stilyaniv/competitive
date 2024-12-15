@@ -1,3 +1,5 @@
+# part 1
+
 ```
     00 01 02 03 04 05 06 07 08 09
 00   R  R  R  R  I  I  C  C  F  F
@@ -13,12 +15,30 @@
 
      0  0  0  0  1  1  2  2  3  3
      0  0  0  0  1  1  2  2  2  3
-     4  4  0  0  0  5  5  6  6  6
-     4  4  0  7  7  7  8  6  6  6
-     4  4  4  4  7  9  9 10  6 11
+     4  4  0  0  0  5  5  3  3  3
+     4  4  0  7  7  7  8  3  3  3
+     4  4  4  4  7  9  9 10  3 11
      4  4 12  4  7  7  9  9 13 13
      4  4 12 12 12  7  9  9 13 13
     14 15 15 15 15 15  9  9 13 13
     14 15 15 15 16 15  9 17 17 17
     14 14 14 15 16 16  9 17 17 17
 ```
+
+# part 2
+
+A A A A A A
+A A A B B A
+A A A B B A
+A B B A A A
+A B B A A A
+A A A A A A
+
+A: 4 outside, 8 inside
+B: each has 4 outside
+
+![alt text](image.png)
+considering the right-most R, it should count fence above but not below
+the one below has been counted towards the **parent** node - so pass parent node
+to allow for checking whether the parent's already counted
+for R @ 4,2: 1) parent is R @ 3,2 2) check direction of parent - which one of x or y stayed the same 3) if direction is left or right then check the paren't up and down nodes for perimeter -> but doesn't this mean every other node will reset 
