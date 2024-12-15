@@ -116,8 +116,7 @@ def timing(f):
     return wrap
 
 
-@timing
-def part_1(file):
+def read_grid_moves(file):
     grid = []
     moves = []
     x, y = 0, 0
@@ -137,11 +136,18 @@ def part_1(file):
             grid.append(row)
         else:
             moves.extend([c for c in line.strip()])
-    grid_str = "\n".join(["".join([str(x) if x else BLANK for x in row]) for row in grid])
+    # grid_str = "\n".join(["".join([str(x) if x else BLANK for x in row]) for row in grid])
     # print(grid_str)
     # print(moves)
     x, y = special_chars['@'][0]
     print(f"Starting position: {special_chars['@']}")
+
+    return x, y, grid, moves
+
+
+@timing
+def part_1(file):
+    x, y, grid, moves = read_grid_moves(file)
 
     for move in moves:
         if move == "<":
@@ -183,14 +189,14 @@ def part_2(file):
 
 
 if __name__ == "__main__":
-    # with io.StringIO(EXAMPLE) as f:
-    #     print(f"{part_1(f)} == {PART1_EXAMPLE_OUTPUT}?")
-
-    # with open(INPUT_FILE_PATH) as f:
-    #     print(part_1(f))
-
     with io.StringIO(EXAMPLE) as f:
-        part_2(f)
+        print(f"{part_1(f)} == {PART1_EXAMPLE_OUTPUT}?")
+
+    with open(INPUT_FILE_PATH) as f:
+        print(part_1(f))
+
+    # with io.StringIO(EXAMPLE) as f:
+    #     part_2(f)
 
     # with open(INPUT_FILE_PATH) as f:
     #     print(part_2(f))
