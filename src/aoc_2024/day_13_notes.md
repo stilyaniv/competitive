@@ -1,21 +1,35 @@
 # part 1
 
 ```
-Button A: X+94, Y+34
-Button B: X+22, Y+67
-Prize: X=8400, Y=5400
-
-Button A: X+26, Y+66
-Button B: X+67, Y+21
-Prize: X=12748, Y=12176
-
-Button A: X+17, Y+86
-Button B: X+84, Y+37
-Prize: X=7870, Y=6450
-
-Button A: X+69, Y+23
-Button B: X+27, Y+71
-Prize: X=18641, Y=10279
+1 · 1 2 · · · · · · ·
+· · · · · · · · · · ·
+· · · · · · · · · · ·
+· · · · · · 1 1 · 1 1
+1 · 1 · · · · · · · ·
+· · · · · · · · · 1 ·
+· · · · · · · 1 · · ·
 ```
 
+```
+  0 1 2 3 4 5 6 7 8 9 0
+0 1 · 1 2 · · · · · · ·
+1 · · · · · · · · · · ·
+2 · · · · · · · · · · ·
+3 · · · · · · 1 1 · 1 1
+4 1 · 1 · · · · · · · ·
+5 · · · · · · · · · 1 ·
+6 · · · · · · · 1 · · ·
+```
+
+1 - 3 = 5
+
 # part 2
+
+        if Da % D == 0 and Db % D == 0:
+            a = Da // D
+            b = Db // D
+            price = 3*a + b
+            coins += price
+            print(a, b, price)
+        else:
+            print(f"Machine has no winners {machine}")
