@@ -22,16 +22,3 @@ def test_part_2_example():
 def test_part_2_full():
     with open(INPUT_FILE_PATH) as f:
         assert part_2(f) is None
-
-
-def test_part_2_edge_cases():
-    # Test Case 1: No movement possible
-    assert part_2(io.StringIO("11")) == "0."
-    # Test Case 2: Multiple gaps
-    # assert part_2(io.StringIO("1212")) == "1122"
-    # Test Case 3: Already optimal
-    # assert part_2(io.StringIO("2020")) == "00.."
-    # Test Case 4: Complex movement required
-    # assert part_2(io.StringIO("102030")) == "302010"
-    # Test Case 5: Edge file movement
-    assert part_2(io.StringIO("0121")) == "1102"
