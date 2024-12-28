@@ -141,6 +141,7 @@ def read_grid_moves(file):
     # print(moves)
     x, y = special_chars['@'][0]
     print(f"Starting position: {special_chars['@']}")
+    print("\n".join(["".join([str(x) for x in row]) for row in grid]))
 
     return x, y, grid, moves
 
@@ -184,19 +185,143 @@ def part_1(file):
     return gps_sums
 
 
-def part_2(file):
+EXAMPLE_PART_2 = """\
+####################
+##....[]....[]..[]##
+##............[]..##
+##..[][]....[]..[]##
+##....[]@.....[]..##
+##[]##....[]......##
+##[]....[]....[]..##
+##..[][]..[]..[][]##
+##........[]......##
+####################
+
+v
+"""
+
+EXAMPLE_PART_2_SIMPLE = """\
+####################
+##..[]............##
+##...[]...........##
+##....[]..........##
+##.....@..........##
+##....[]..........##
+##................##
+##...[][].........##
+##..[]............##
+##................##
+####################
+
+v
+"""
+
+
+def find_space(x, y, xc, yc, grid):
     pass
 
 
+def walk(x, y, xc, yc, grid):
+    can_move = False
+    xn, yn = (x + xc, y + yc)
+    if grid[yn][xn] == BLANK:
+        grid[yn][xn] = grid[y][x]
+        grid[y][x] = BLANK
+        x, y = xn, yn
+        can_move = True
+    elif grid[yn][xn] == ']' or grid[yn][xn] == '[':
+        # move left or right
+        if xc != 0:
+            xnn, ynn = (xn + xc, yn + yc)
+            print(grid[yn][xn], grid[ynn][xnn])
+            if grid[ynn][xnn] != '#':
+                xnn, ynn, can_move = walk(xnn, ynn, xc, yc, grid)
+                if can_move:
+                    xn, yn, can_move = walk(xn, yn, xc, yc, grid)
+                    x, y, can_move = walk(x, y, xc, yc, grid)
+        if yc != 0:
+            # xnn, ynn = (xn + xc, yn + yc)
+            # print(grid[yn][xn], grid[ynn][xnn])
+            # if grid[ynn][xnn] != '#':
+            staging = [(x, y)]
+            current_level = []
+            level = 1
+            for x, y in staging:
+                xn, yn = (x + xc, y + yc)
+                if grid[yn][xn] == ']':
+                    x_l, y_l = xn-1, yn
+                    x_r, y_r = xn, yn
+                elif grid[yn][xn] == '[':
+                    x_l, y_l = xn, yn
+                    x_r, y_r = xn+1, yn
+                # TODO need to detect . at this point otherwise x_l, x_r etc
+                #      stay the same and it keep reinserting to current level
+                current_level.extend([(x_l, y_l), (x_r, y_r)])
+                if len(current_level) == 2 ** level:
+                    if all(grid[y][x] == BLANK for x, y in current_level):
+                        while staging:
+                            can_move = True
+                            xn, yn = (x + xc, y + yc)
+                            grid[yn][xn] = grid[y][x]
+                            grid[y][x] = BLANK
+                            # x, y = xn, yn
+                    else:
+                        staging.extend(current_level)
+                        current_level = []
+                        level += 1
+                else:
+                    current_level.extend([(x_l, y_l), (x_r, y_r)])
+
+                print(grid[y_l][x_l], grid[y_r][x_r])
+            # can_move = find_space(x_object_left, y_object_left, xc, yc, grid)
+            # can_move = find_space(x_object_right, y_object_right, xc, yc, grid)
+
+            # xnn, ynn, can_move = walk(xnn, ynn, xc, yc, grid)
+            # if can_move:
+            #     xn, yn, can_move = walk(xn, yn, xc, yc, grid)
+            #     x, y, can_move = walk(x, y, xc, yc, grid)
+
+    return x, y, can_move
+
+
+def part_2(file):
+    x, y, grid, moves = read_grid_moves(file)
+    for move in moves:
+        if move == "<":
+            xc, yc = (-1, 0)
+        elif move == ">":
+            xc, yc = (1, 0)
+        elif move == "^":
+            xc, yc = (0, -1)
+        elif move == "v":
+            xc, yc = (0, 1)
+
+        x, y, can_move = walk(x, y, xc, yc, grid)
+        if can_move:
+            print(f"Move {move} resulted in:")
+        else:
+            print(f"Move {move} skipped.")
+
+        print("\n".join(["".join([str(x) for x in row]) for row in grid]))
+        sleep(0.5)
+
+    gps_sums = 0
+    for y, row in enumerate(grid):
+        for x, char in enumerate(row):
+            if grid[y][x] == "O":
+                gps_sums += x + 100*y
+    return gps_sums
+
+
 if __name__ == "__main__":
-    with io.StringIO(EXAMPLE) as f:
-        print(f"{part_1(f)} == {PART1_EXAMPLE_OUTPUT}?")
-
-    with open(INPUT_FILE_PATH) as f:
-        print(part_1(f))
-
     # with io.StringIO(EXAMPLE) as f:
-    #     part_2(f)
+    #     print(f"{part_1(f)} == {PART1_EXAMPLE_OUTPUT}?")
+
+    # with open(INPUT_FILE_PATH) as f:
+    #     print(part_1(f))
+
+    with io.StringIO(EXAMPLE_PART_2_SIMPLE) as f:
+        part_2(f)
 
     # with open(INPUT_FILE_PATH) as f:
     #     print(part_2(f))

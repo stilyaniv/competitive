@@ -120,14 +120,27 @@ def part_2(file):
         for x in range(x_len):
             square = grid[y][x]
             garden = []
-            perim = traverse_2(grid, x_len, y_len, x, y, square, visited, garden)
-            # draw_frame(x_len, y_len, perim)
-            perims = sorted(perim, key=lambda t: (t[0], t[1]))
+            perims = traverse_2(grid, x_len, y_len, x, y, square, visited, garden)
+            # perims = sorted(perim, key=lambda t: (t[0], t[1]))
             # TODO perims - remove from perims if two nodes differ by exactly 1 unit of x or 1 unit of y
-            price = len(garden) * len(perim)
-            total_price += price
-            if garden or perim:
+            if garden or perims:
+                perim = 0
+                # if square == 'R':
+                x_sorted = sorted(perims, key=lambda t: (t[0]))
+                y_sorted = sorted(perims, key=lambda t: (t[1]))
+                for i in range(1, len(x_sorted)):
+                    if x_sorted[i-1][0] == x_sorted[i][0] and (abs(x_sorted[i-1][1] - x_sorted[i][1]) <= 1):
+                        perim += 1
+                for i in range(1, len(y_sorted)):
+                    if y_sorted[i-1][1] == y_sorted[i][1] and (abs(y_sorted[i-1][0] - y_sorted[i][0]) == 1):
+                        perim += 1
+                # print(perim)
+                price = len(garden) * perim
+                total_price += price
                 print(f"{square}: {len(garden)} * {perim} = {price}")
+                # draw_frame(x_len+1, y_len+1, perims)
+                # grid_str = "\n".join(["".join([str(x) if x else BLANK for x in row]) for row in grid])
+                # print(grid_str)
     return total_price
 
 
