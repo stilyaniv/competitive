@@ -21,4 +21,4 @@ def test_part_2_example():
 
 def test_part_2_full():
     with open(INPUT_FILE_PATH) as f:
-        assert part_2(f) is None
+        assert part_2(f) == 6287317016845
