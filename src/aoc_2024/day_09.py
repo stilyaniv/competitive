@@ -93,11 +93,11 @@ def part_2(file):
     line = file.readline().strip()
     if len(line) % 2 != 0:
         line = line + "0"
-    file_id = 0
+    smallest_file_id = 0
     for i in range(0, len(line), 2):
-        expanded_line.extend(int(line[i]) * [str(file_id)])
+        expanded_line.extend(int(line[i]) * [str(smallest_file_id)])
         expanded_line.extend(int(line[i + 1]) * ["."])
-        file_id += 1
+        smallest_file_id += 1
 
     empty_start, empty_end = 0, 1
     file_start = len(expanded_line) - 2
@@ -105,7 +105,7 @@ def part_2(file):
     new_line = list(expanded_line)
     print_pointers(new_line, [empty_start, empty_end], [file_start, file_end])
     while file_start >= 0:
-        if expanded_line[file_end] == ".":
+        if expanded_line[file_end] == "." or int(expanded_line[file_end]) > smallest_file_id:
             file_end -= 1
             file_start -= 1
             print_pointers(new_line, [empty_start, empty_end], [file_start, file_end])
@@ -115,6 +115,7 @@ def part_2(file):
                 print_pointers(new_line, [empty_start, empty_end], [file_start, file_end])
             file_size = file_end - file_start
             file_start += 1
+            smallest_file_id = int(expanded_line[file_end])
 
             while True:
                 # searching for a space
