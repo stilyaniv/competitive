@@ -64,6 +64,32 @@ def part_1(file):
     return checksum_pos
 
 
+# no spaces, shouldn't move anything
+# EXAMPLE = """\
+# 1010101010101010101
+# """
+
+# move last only, with 2 digit number
+# EXAMPLE = """\
+# 111010101010101010101
+# """
+
+# move when space is exactly adjacent to the file
+# EXAMPLE = """\
+# 122
+# """
+
+# # skip one on the right and only move the next one
+# EXAMPLE = """\
+# 12203
+# """
+
+# # skip one on the right and only move the next one
+# EXAMPLE = """\
+# 12203
+# """
+
+
 def part_2(file):
     expanded_line = []
     line = file.readline().strip()
@@ -81,6 +107,8 @@ def part_2(file):
     # expanded_line_str, file_id = "0..1..22.", 2
     # expanded_line_str, file_id = "0..112233445566778899", 9
     # expanded_line_str, file_id = "0..11", 2
+    # expanded_line_str, file_id = "0..11..", 2
+    # expanded_line_str, file_id = "0..11.222", 2
     # expanded_line = list(expanded_line_str)
 
     # first_empty = 0
@@ -90,6 +118,7 @@ def part_2(file):
     new_line = list(expanded_line)
     print_pointers(new_line, [empty_start, empty_end], [file_start, file_end])
     while file_start >= 0:
+        # while file_id >= 0:
         if expanded_line[file_end] == ".":
             file_end -= 1
             file_start -= 1
@@ -103,10 +132,13 @@ def part_2(file):
                 print_pointers(new_line, [empty_start, empty_end], [file_start, file_end])
             file_size = file_end - file_start
             file_start += 1
+            # if file_id != int(new_line[file_end]):
+            #     file_id = int(new_line[file_end])
+            #     print(file_id)
 
             while True:
                 # searching for a space
-                while new_line[empty_start] != "." and empty_end < file_start:
+                while new_line[empty_start] != "." and empty_start < file_start:
                     empty_start += 1
                     empty_end += 1
                     print_pointers(new_line, [empty_start, empty_end], [file_start, file_end])
@@ -114,7 +146,7 @@ def part_2(file):
                     empty_end += 1
                     print_pointers(new_line, [empty_start, empty_end], [file_start, file_end])
                 # no more space to the left of current file
-                if empty_end > file_start:
+                if empty_end > file_start or empty_start >= file_start:
                     file_end = file_start - 1
                     file_start = file_end - 1
                     empty_start, empty_end = 0, 1
@@ -169,7 +201,8 @@ DEBUG = False
 
 def print_pointers(original_list, left_pointers, right_pointers=[]):
     if not DEBUG:
-        print(right_pointers)
+        return
+        # print(right_pointers)
     new_list = []
     for i in range(len(original_list)):
         if i in left_pointers:
@@ -196,6 +229,7 @@ if __name__ == "__main__":
         print(part_2(f))
 
     # 6285181766200 wrong
+    # 6287317016845 correct
     # 6287317036313 wrong
     # 6287319403172 wrong
     # 6287404501347 too high
