@@ -99,6 +99,7 @@ def part_2(file):
         expanded_line.extend(int(line[i + 1]) * ["."])
         smallest_file_id += 1
 
+    first_empty = 0
     empty_start, empty_end = 0, 1
     file_start = len(expanded_line) - 2
     file_end = len(expanded_line) - 1
